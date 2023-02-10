@@ -1,4 +1,6 @@
 {
     "DB_HOST": "sql11.freesqldatabase.com",
-    "DB_USER": "sql11674879"
+    "DB_USER": "sql11674879",
+    "DB_PASSWORD": "cMFiYb63Vi",
+    "DB_DATABASE": "sql11674879"
 }
