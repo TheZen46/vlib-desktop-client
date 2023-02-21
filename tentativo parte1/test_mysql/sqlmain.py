@@ -11,3 +11,5 @@ conn = mysql.connector.connect(
     password=config['DB_PASSWORD'],
     database=config['DB_DATABASE']
 )
+cursor = conn.cursor()
+cursor.execute('SELECT username, en_passcode FROM users_basicdata;')
