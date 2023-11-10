@@ -1,9 +1,5 @@
-from tkinter import Tk, Frame
-class Application(Tk):
-    def __init__(self, OUTPUT_PATH):
-        Tk.__init__(self)
-        self.title('VLib')
-        self.geometry('1253x767')
-        self.pages = {}
-    def show_page(self, page_name):
-        pass
+from tkinter import Tk, Frame, Toplevel, Canvas
+import math, time, threading
+class LoadingPage(Toplevel):
+    def __init__(self, parent):
+        Toplevel.__init__(self, parent)
