@@ -73,3 +73,8 @@ Desktop.ini
 *.swp
 *.swo
 *~
+
+# Application Runtime Temporary Files
+local_temp_files/
+local_downloaded_image.png
+token.txt
