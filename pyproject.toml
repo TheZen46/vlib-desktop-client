@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vlib-desktop-client"
+version = "1.0.0"
+description = "Cyberpunk-inspired desktop community client, user portal, and modding launcher built with Python and Tkinter."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [
+    { name = "The Zen", email = "116784625+TheZen46@users.noreply.github.com" }
+]
+keywords = ["desktop", "gui", "tkinter", "cyberpunk", "gaming", "modding", "client"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Win32 (MS Windows)",
+    "Environment :: X11 Applications",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Games/Entertainment",
+    "Topic :: Software Development :: User Interfaces"
+]
+dependencies = [
+    "Pillow>=9.0.0"
+]
+
+[project.optional-dependencies]
+cloud = [
+    "boto3>=1.26.0",
+    "dropbox>=11.36.0",
+    "mysql-connector-python>=8.0.0"
+]
+audio = [
+    "pygame>=2.1.0"
+]
+all = [
+    "vlib-desktop-client[cloud,audio]"
+]
+
+[project.scripts]
+vlib = "run_client:main"
+
+[project.gui-scripts]
+vlib-gui = "run_client:main"
+
+[tool.setuptools]
+py-modules = ["run_client"]
