@@ -10,7 +10,7 @@ class Page1(tk.Frame):
         self.controller = controller
         self.OUTPUT_PATH = OUTPUT_PATH
 
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"F:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame8")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "build" / "assets" / "frame8"
 
         self.canvas = tk.Canvas(
             self,
