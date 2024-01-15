@@ -1,37 +1,46 @@
-'''
-The file finder has only one work, find files, no shit sherlock. But with which method? Well it requires one thing, the name of the frame.
-Ones the functions has it, we can start. it has to find the PATH of the main program, and than the folder called 'build' and then 'assets',
-it will return imidiately the path of the frame, and than the only thing you'll have to add which kind of assets in that frame with the normal function
+"""
+VLib Universal Frame Asset Resolver
+Dynamically locates frame assets across all environments and development paths.
+"""
 
-'''
+from pathlib import Path
+from typing import Optional
 
-import os
 
-def find_frame_assets(frame_name):
-    # Get the path of the main program
-    main_program_path = os.path.abspath(os.path.dirname(__file__))  # Assuming this script is in the main program directory
+def find_frame_assets(frame_name: str) -> Optional[Path]:
+    """
+    Locates the asset directory for a given frame name (e.g., 'frame0', 'frame12').
+    Intelligently traverses directory hierarchies to support both modular builds
+    and root executions.
+    """
+    current_dir = Path(__file__).resolve().parent
+    candidate_paths = [
+        current_dir.parent / "assets" / frame_name,               # build/assets/frameX (from try/)
+        current_dir.parent.parent / "build" / "assets" / frame_name, # from root or sub-module
+        current_dir / "assets" / frame_name                      # local assets/frameX
+    ]
+    for p in candidate_paths:
+        if p.exists() and p.is_dir():
+            return p
+    return None
 
-    print(main_program_path)
 
-    # Construct the path to the 'build' directory
-    build_directory = os.path.join(main_program_path, 'build')
+def relative_to_frame(frame_name: str, asset_filename: str) -> Optional[Path]:
+    """
+    Returns the resolved Path for a specific asset inside a frame folder.
+    """
+    frame_dir = find_frame_assets(frame_name)
+    if frame_dir:
+        asset_path = frame_dir / asset_filename
+        if asset_path.exists():
+            return asset_path
+    return None
 
-    # Construct the path to the 'assets' directory within 'build'
-    assets_directory = os.path.join(build_directory, 'assets')
 
-    # Construct the path to the specific frame
-    frame_path = os.path.join(assets_directory, frame_name)
-
-    if os.path.exists(frame_path) and os.path.isdir(frame_path):
-        return frame_path
+if __name__ == "__main__":
+    test_frame = "frame0"
+    resolved = find_frame_assets(test_frame)
+    if resolved:
+        print(f"[file_finder] Successfully resolved '{test_frame}' to: {resolved}")
     else:
-        return None  # Frame not found
-
-# Example usage
-frame_name = "my_frame"
-frame_assets_path = find_frame_assets(frame_name)
-
-if frame_assets_path:
-    print(f"Assets for frame '{frame_name}' are located at: {frame_assets_path}")
-else:
-    print(f"Frame '{frame_name}' not found.")
+        print(f"[file_finder] Frame '{test_frame}' not found.")
