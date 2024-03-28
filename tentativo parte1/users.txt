@@ -1,1 +1,12 @@
+username: thezen46
+password: password47sicura
+icon_image: C:\Users\Alessandro\Desktop\libriInformatica-master\porgram\programmi+\tentativo parte1\build\assets\frame4\button_10.png
+birthday: 1990-01-01
+description: This is Alice's description.
+
+username: Bob
+password: bob_password
+icon_image: path/to/bob_icon.jpg
+birthday: 1985-05-15
+description: Bob's profile description.
 
