@@ -12,3 +12,17 @@ BG_PRIMARY = "#272932"       # Dark slate canvas baseline
 BG_SECONDARY = "#200628"     # Deep neon violet container
 ACCENT_NEON = "#FDF500"      # Cyberpunk high-contrast yellow
 ACCENT_PURPLE = "#9370DB"    # Medium purple divider lines
+ACCENT_CYAN = "#00F0FF"      # Secondary cyberpunk highlight
+TEXT_LIGHT = "#FFFFFF"       # White foreground headers
+TEXT_MUTED = "#8B949E"       # Muted subtitle text
+SUCCESS_GREEN = "#00FF66"    # Active status green
+DANGER_RED = "#FF003C"       # Error / warning red
+
+# Window Dimensions & Grid
+WINDOW_WIDTH = 1253
+WINDOW_HEIGHT = 767
+CANVAS_RELIEF = "ridge"
+CANVAS_BD = 0
+
+# Typography
+FONT_NAME_BRAND = "RussoOne Regular"
