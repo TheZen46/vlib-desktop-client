@@ -26,3 +26,18 @@ CANVAS_BD = 0
 
 # Typography
 FONT_NAME_BRAND = "RussoOne Regular"
+FONT_NAME_UI = "Helvetica"
+
+
+def font_brand(size: int = 20) -> Tuple[str, int]:
+    return (FONT_NAME_BRAND, -abs(size))
+
+
+def font_ui(size: int = 11, bold: bool = False) -> Tuple[str, int, str]:
+    style = "bold" if bold else "normal"
+    return (FONT_NAME_UI, abs(size), style)
+
+
+def play_cyber_sound(sound_type: str = "click", enabled: bool = True):
+    """
+    Non-blocking synthesized audio effect for Cyberpunk UI interactions.
