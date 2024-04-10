@@ -41,3 +41,17 @@ def font_ui(size: int = 11, bold: bool = False) -> Tuple[str, int, str]:
 def play_cyber_sound(sound_type: str = "click", enabled: bool = True):
     """
     Non-blocking synthesized audio effect for Cyberpunk UI interactions.
+    Gracefully executes in a background thread without blocking Tkinter UI.
+    """
+    if not enabled or sys.platform != "win32":
+        return
+
+    def _play():
+        try:
+            import winsound
+            if sound_type == "roll":
+                for f in (440, 580, 720, 880):
+                    winsound.Beep(f, 35)
+            elif sound_type == "win":
+                for f in (523, 659, 784, 1046):
+                    winsound.Beep(f, 60)
