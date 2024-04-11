@@ -55,3 +55,18 @@ def play_cyber_sound(sound_type: str = "click", enabled: bool = True):
             elif sound_type == "win":
                 for f in (523, 659, 784, 1046):
                     winsound.Beep(f, 60)
+            elif sound_type == "recharge":
+                for f in (440, 554, 659, 880):
+                    winsound.Beep(f, 50)
+            elif sound_type == "claim":
+                for f in (600, 900):
+                    winsound.Beep(f, 65)
+            elif sound_type == "hack":
+                for f in (800, 600, 1000, 750):
+                    winsound.Beep(f, 40)
+            elif sound_type == "click":
+                winsound.Beep(750, 25)
+        except Exception:
+            pass
+
+    threading.Thread(target=_play, daemon=True).start()
