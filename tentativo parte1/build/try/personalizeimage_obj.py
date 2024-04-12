@@ -1,8 +1,21 @@
+# [2024-DEV Stage 1/2]: refactor(image): implement pure Pillow rounded corners in personalizeimage_obj.py
 from pathlib import Path
 from tkinter import Pack, Label, filedialog, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage, StringVar, OptionMenu
 from PIL import Image, ImageDraw, ImageOps
-from colorama import Fore, Style
-import aggdraw
+try:
+    from colorama import Fore, Style
+except ImportError:
+    class _ColorDummy:
+        def __getattr__(self, name): return ""
+    Fore = _ColorDummy()
+    Style = _ColorDummy()
+
+try:
+    import aggdraw
+    AGGDRAW_AVAILABLE = True
+except ImportError:
+    aggdraw = None
+    AGGDRAW_AVAILABLE = False
 
 class PersonalizeImage(Frame):
     def __init__(self, parent, controller, OUTPUT_PATH):
@@ -10,7 +23,7 @@ class PersonalizeImage(Frame):
         self.controller = controller
         self.OUTPUT_PATH= OUTPUT_PATH
         
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:/partizione alessandro/programmi+/tentativo parte1/build/assets/frame4")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame4"
 
         self.canvas = Canvas(
             self,
@@ -319,7 +332,7 @@ class PersonalizeImage(Frame):
             bg='#200628',
             activebackground='#200628',
             highlightthickness=0,
-            command=lambda: self.message_print('F:/partizione alessandro/programmi+/tentativo parte1/build/assets/frame4/button_9.png', self.button_14),
+            command=lambda: self.message_print(str(Path(__file__).resolve().parent.parent / 'assets' / 'frame4' / 'button_9.png'), self.button_14),
             relief="flat"
         )
         self.button_14.place(
@@ -338,7 +351,7 @@ class PersonalizeImage(Frame):
             bg='#200628',
             activebackground='#200628',
             highlightthickness=0,
-            command=lambda: self.message_print('F:/partizione alessandro/programmi+/tentativo parte1/build/assets/frame4/button_9.png', self.button_15),
+            command=lambda: self.message_print(str(Path(__file__).resolve().parent.parent / 'assets' / 'frame4' / 'button_9.png'), self.button_15),
             relief="flat"
         )
         self.button_15.place(
@@ -357,7 +370,7 @@ class PersonalizeImage(Frame):
             bg='#200628',
             activebackground='#200628',
             highlightthickness=0,
-            command=lambda: self.message_print('F:/partizione alessandro/programmi+/tentativo parte1/build/assets/frame4/button_9.png', self.button_16),
+            command=lambda: self.message_print(str(Path(__file__).resolve().parent.parent / 'assets' / 'frame4' / 'button_9.png'), self.button_16),
             relief="flat"
         )
         self.button_16.place(
@@ -376,7 +389,7 @@ class PersonalizeImage(Frame):
             bg='#200628',
             activebackground='#200628',
             highlightthickness=0,
-            command=lambda: self.message_print('F:/partizione alessandro/programmi+/tentativo parte1/build/assets/frame4/button_9.png', self.button_17),
+            command=lambda: self.message_print(str(Path(__file__).resolve().parent.parent / 'assets' / 'frame4' / 'button_9.png'), self.button_17),
             relief="flat"
         )
         self.button_17.place(
@@ -395,7 +408,7 @@ class PersonalizeImage(Frame):
             bg='#200628',
             activebackground='#200628',
             highlightthickness=0,
-            command=lambda: self.message_print('F:/partizione alessandro/programmi+/tentativo parte1/build/assets/frame4/button_9.png', self.button_18),
+            command=lambda: self.message_print(str(Path(__file__).resolve().parent.parent / 'assets' / 'frame4' / 'button_9.png'), self.button_18),
             relief="flat"
         )
         self.button_18.place(
@@ -478,11 +491,14 @@ class PersonalizeImage(Frame):
         # Apply rounded corners with a transparent background
         rounded_image = self.round_corner_jpg(res_image, corner_radius)
 
-        # Save the modified image with rounded corners
-        rounded_image.save('res_image.png')
+        # Save the modified image with rounded corners in isolated cache
+        temp_dir = Path(__file__).resolve().parent.parent.parent / "local_temp_files"
+        temp_dir.mkdir(parents=True, exist_ok=True)
+        res_path = temp_dir / "res_image.png"
+        rounded_image.save(str(res_path))
 
         new_img_12 = PhotoImage(
-            file='res_image.png'
+            file=str(res_path)
         )
         if len(self.buttonclick) == 0:
             print(f'{Fore.RED}no buttons clicked before{Style.RESET_ALL}')
@@ -491,33 +507,34 @@ class PersonalizeImage(Frame):
                 image=new_img_12
             )
 
-        self.list_click.append('F:/partizione alessandro/programmi+/tentativo parte1/res_image.png')
+        self.list_click.append(str(res_path))
 
 
     def round_corner_jpg(self, image, radius):
         """Generate an image with rounded corners and a transparent background."""
-        mask = Image.new('L', image.size, 0)  # Create a transparent mask
-        draw = aggdraw.Draw(mask)
-        brush = aggdraw.Brush('white')
-        width, height = mask.size
+        width, height = image.size
+        mask = Image.new('L', (width, height), 0)
+        if AGGDRAW_AVAILABLE and aggdraw:
+            try:
+                draw = aggdraw.Draw(mask)
+                brush = aggdraw.Brush('white')
+                draw.pieslice((0, 0, radius * 2, radius * 2), 90, 180, None, brush)
+                draw.pieslice((width - radius * 2, 0, width, radius * 2), 0, 90, None, brush)
+                draw.pieslice((0, height - radius * 2, radius * 2, height), 180, 270, None, brush)
+                draw.pieslice((width - radius * 2, height - radius * 2, width, height), 270, 360, None, brush)
+                draw.rectangle((radius, radius, width - radius, height - radius), brush)
+                draw.rectangle((radius, 0, width - radius, radius), brush)
+                draw.rectangle((0, radius, radius, height - radius), brush)
+                draw.rectangle((radius, height - radius, width - radius, height), brush)
+                draw.rectangle((width - radius, radius, width, height - radius), brush)
+                draw.flush()
+            except Exception:
+                draw = ImageDraw.Draw(mask)
+                draw.rounded_rectangle((0, 0, width, height), radius=radius, fill=255)
+        else:
+            draw = ImageDraw.Draw(mask)
+            draw.rounded_rectangle((0, 0, width, height), radius=radius, fill=255)
 
-        # Create rounded corners in the mask
-        draw.pieslice((0,0,radius*2, radius*2), 90, 180, None, brush)
-        #upper-right corner
-        draw.pieslice((width - radius*2, 0, width, radius*2), 0, 90, None, brush)
-        #bottom-left corner
-        draw.pieslice((0, height - radius * 2, radius*2, height),180, 270, None, brush)
-        #bottom-right corner
-        draw.pieslice((width - radius * 2, height - radius * 2, width, height), 270, 360, None, brush)
-        #center rectangle
-        draw.rectangle((radius, radius, width - radius, height - radius), brush)
-        #four edge rectangle
-        draw.rectangle((radius, 0, width - radius, radius), brush)
-        draw.rectangle((0, radius, radius, height-radius), brush)
-        draw.rectangle((radius, height-radius, width-radius, height), brush)
-        draw.rectangle((width-radius, radius, width, height-radius), brush)
-
-        draw.flush()
         image = image.convert('RGBA')
         image.putalpha(mask)
         return image
