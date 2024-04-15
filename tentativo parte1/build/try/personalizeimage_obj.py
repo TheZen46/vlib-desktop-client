@@ -1,4 +1,3 @@
-# [2024-DEV Stage 1/2]: refactor(image): implement pure Pillow rounded corners in personalizeimage_obj.py
 from pathlib import Path
 from tkinter import Pack, Label, filedialog, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage, StringVar, OptionMenu
 from PIL import Image, ImageDraw, ImageOps
