@@ -14,7 +14,7 @@ class Done(Frame):
         self.controller = controller
         self.OUTPUT_PATH= OUTPUT_PATH
         
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame3")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame3"
 
         self.canvas = Canvas(
             self,
@@ -264,8 +264,16 @@ class Done(Frame):
         self.buttons_list.append(self.checkbutton)
 
     def write_data(self, filename, data):
-        with open(filename, 'w') as file:
-            json.dump(data, file, indent=4)
+        destinations = [
+            Path(filename),
+            Path(__file__).resolve().parent.parent.parent / filename
+        ]
+        for dest in destinations:
+            try:
+                with open(dest, 'w', encoding='utf-8') as file:
+                    json.dump(data, file, indent=4)
+            except Exception:
+                pass
 
     def calculate_sha256(self, data):
         sha256_hash = hashlib.sha256()
@@ -273,19 +281,20 @@ class Done(Frame):
         return sha256_hash.hexdigest()
 
     def variation(self):
-        if self.boolean_var== True:
-            activity= 'Active'
-            username= self.controller.temp_tool(what= 'obt', where='user')
-            passcode= self.calculate_sha256(self.controller.temp_tool(what= 'obt', where='pass'))
+        username = self.controller.temp_tool(what='obt', where='user')
+        if username:
+            self.controller.change_username(username)
+        if self.boolean_var == True:
+            activity = 'Active'
+            raw_pass = self.controller.temp_tool(what='obt', where='pass') or ''
+            passcode = self.calculate_sha256(raw_pass)
             data = {"user": username, "pass": passcode, 'activity': activity}
             self.write_data("Onl_verification.json", data)
             print('data written')
             self.controller.show_page("main_channel")
         else:
-            activity= 'Ghost'
-            username= None
-            passcode= None
-            data = {"user": username, "pass": passcode, 'activity': activity}
+            activity = 'Ghost'
+            data = {"user": None, "pass": None, 'activity': activity}
             self.write_data("Onl_verification.json", data)
             print('data written')
             self.controller.show_page("main_channel")
