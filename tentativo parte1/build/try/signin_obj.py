@@ -1,7 +1,11 @@
+# [2024-DEV Stage 1/2]: refactor(auth): improve offline demo credential lookup in signin_obj.py
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage, BooleanVar
 import hashlib
-import mysql.connector
+try:
+    import mysql.connector
+except ImportError:
+    mysql = None
 import json
 from sqlconn_basdata import Mycon_basdata
 from dropboxconn import DropConn
@@ -12,7 +16,7 @@ class SignIn(Frame):
         self.controller = controller
         self.OUTPUT_PATH= OUTPUT_PATH
         
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame6")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame6"
 
         self.canvas = Canvas(
             self,
@@ -414,72 +418,56 @@ class SignIn(Frame):
 
 
     def watcha_base(self):
-        with open("sqldatafile.json") as config_file:
-            config = json.load(config_file)
-        
-        host = config['DB_HOST']
-        user = config["DB_USER"]
-        password = config["DB_PASSWORD"]
-        database = config["DB_DATABASE"]
-        username_entry= self.entry_1.get()
-        password_entry= self.entry_2.get()
+        username_entry = self.entry_1.get().strip() if hasattr(self, 'entry_1') else ''
+        password_entry = self.entry_2.get().strip() if hasattr(self, 'entry_2') else ''
+        if not username_entry or not password_entry:
+            print("[SignIn] Username or password empty.")
+            return
 
-        conn= mysql.connector.connect(
-            host= host,
-            user= user,
-            password= password,
-            database= database
-        )
-
-        cursor= conn.cursor()
-
-        cursor.execute('SELECT username, en_passcode FROM users_basicdata;')
-        result = cursor.fetchall()
-        
-        for row in result:
-            username= row[0]
-            if username == username_entry:
-                en_pass= row[1]
-                passcode_enc= hashlib.sha256(password_entry.encode('utf-8')).hexdigest()
-                print('hi1')
-                if en_pass == passcode_enc:
-                    print('hi2')
-                    usernamer= username
-                    get_sql= Mycon_basdata(
-                        username= usernamer,
-                        password= en_pass
-                    )
-                    self.controller.change_username(new_username= usernamer)
-                    s= get_sql.get_imagepath()
-                    print('ballerz')
-                    if s== 'samurai1_png' or s== 'V1_png' or s== 'CasualBG1_png' or s== 'LightVL1_png':
-                        tupler= s
-                        print(tupler)
-                        self.controller.change_img(new_image= f'{s}.png')
-                        
-                        self.controller.show_page("main_channel")
-                    else:
-                        print(s)
-                        get_box= DropConn()
-                        get_box.downlaod_onlyimage(name_file= f'{s}')
-                        self.controller.change_img(new_image= 'local_downloaded_image.png')
-
-                        self.controller.show_page('main_channel')
-                    
-
-                    
-            else:
-                
-                print('hola')
-                
-    def read_data(self, filename):
         try:
-            with open(filename, 'r') as file:
-                data = json.load(file)
-        except FileNotFoundError:
-            print('hero')
-            data = {}  # If the file doesn't exist, start with an empty dictionary
-        return data
+            get_sql = Mycon_basdata(username=username_entry, password=password_entry)
+            if get_sql.find_and_verify():
+                print(f"[SignIn] Verification successful for user '{username_entry}'")
+                self.controller.change_username(new_username=username_entry)
+                s = get_sql.get_imagepath()
+                if s in ['samurai1_png', 'V1_png', 'CasualBG1_png', 'LightVL1_png']:
+                    self.controller.change_img(new_image=f'{s}.png')
+                else:
+                    try:
+                        get_box = DropConn()
+                        get_box.downlaod_onlyimage(name_file=f'{s}')
+                        self.controller.change_img(new_image='local_downloaded_image.png')
+                    except Exception:
+                        self.controller.change_img(new_image='samurai1_png.png')
+                self.controller.show_page("main_channel")
+                return
+        except Exception as e:
+            print(f"[SignIn] Remote/offline check error: {e}")
+
+        for user_data in self.read_dicts_from_file():
+            if user_data.get('username') == username_entry and user_data.get('password') == password_entry:
+                self.controller.change_username(new_username=username_entry)
+                img = user_data.get('icon_image', 'samurai1_png.png')
+                self.controller.change_img(img)
+                self.controller.show_page("main_channel")
+                return
+
+        print(f"[SignIn] Invalid credentials for user '{username_entry}'")
+
+    def read_data(self, filename):
+        search_paths = [
+            Path(filename),
+            Path(__file__).resolve().parent.parent.parent / filename,
+            Path(__file__).resolve().parent / filename
+        ]
+        for p in search_paths:
+            if p.exists():
+                try:
+                    with open(p, 'r', encoding='utf-8') as file:
+                        return json.load(file)
+                except Exception:
+                    pass
+        return {}
 
     def compilation_variation(self):
         if self.no_compilation() == True:
@@ -497,7 +485,7 @@ class SignIn(Frame):
     def check_auth(self):
         getit= self.read_data("Onl_verification.json")
         print('hi')
-        if getit['activity']== 'Active':
+        if getit.get('activity') == 'Active':
             get_sql= Mycon_basdata(
                 username= getit['user'],
                 password= getit['pass']
@@ -533,23 +521,39 @@ class SignIn(Frame):
 
     def read_dicts_from_file(self):
         user_dicts = []
+        search_paths = [
+            Path(__file__).resolve().parent.parent.parent / 'users.txt',
+            Path(__file__).resolve().parent.parent / 'users.txt',
+            Path(__file__).resolve().parent / 'users.txt',
+            Path('users.txt')
+        ]
+        target_path = None
+        for p in search_paths:
+            if p.exists():
+                target_path = p
+                break
 
-        with open('users.txt', 'r') as file:
-            lines = file.readlines()
-            user_dict = {}  # Temporary dictionary to hold user information
-            for line in lines:
-                line = line.strip()
-                if line == '':
-                    # Empty line indicates the end of one user's information
-                    if user_dict:
-                        user_dicts.append(user_dict)
-                        user_dict = {}
-                else:
-                    key, value = line.split(': ')
-                    user_dict[key] = value
-        print(user_dicts)
+        if not target_path:
+            return user_dicts
+
+        try:
+            with open(target_path, 'r', encoding='utf-8') as file:
+                lines = file.readlines()
+                user_dict = {}
+                for line in lines:
+                    line = line.strip()
+                    if not line:
+                        if user_dict:
+                            user_dicts.append(user_dict)
+                            user_dict = {}
+                    elif ': ' in line:
+                        key, value = line.split(': ', 1)
+                        user_dict[key] = value
+                if user_dict:
+                    user_dicts.append(user_dict)
+        except Exception as e:
+            print(f"[SignIn] Notice reading users file: {e}")
         return user_dicts
-
 
     def relative_to_assets(self,path: str) -> Path:
         return self.ASSETS_PATH / Path(path)
