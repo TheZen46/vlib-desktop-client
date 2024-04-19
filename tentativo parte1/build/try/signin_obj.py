@@ -1,4 +1,3 @@
-# [2024-DEV Stage 1/2]: refactor(auth): improve offline demo credential lookup in signin_obj.py
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage, BooleanVar
 import hashlib
