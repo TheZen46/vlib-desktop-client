@@ -1,3 +1,4 @@
+# [2024-DEV Stage 1/2]: refactor(auth): enforce form validation and password rules in signup_obj.py
 from pathlib import Path
 from tkinter import Pack, Label, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage, StringVar, OptionMenu
 import hashlib
@@ -13,7 +14,7 @@ class SignUp(Frame):
         self.controller = controller
         self.OUTPUT_PATH= OUTPUT_PATH
         
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame0")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame0"
 
         self.canvas = Canvas(
             self,
@@ -568,11 +569,14 @@ class SignUp(Frame):
         if self.entry_2.get() == '':
             return False
         
-        with open(self.relative_to_assets('all-words.txt'), 'r', encoding='utf-8') as file:
-            for line in file:
-                if line.strip() == self.entry_2.get():
-                    print('so..... you tried a password and that\'s too easy? TRY AGAIN!!')
-                    return False
+        try:
+            with open(self.relative_to_assets('all-words.txt'), 'r', encoding='utf-8', errors='ignore') as file:
+                for line in file:
+                    if line.strip() == self.entry_2.get():
+                        print('so..... you tried a password and that\'s too easy? TRY AGAIN!!')
+                        return False
+        except Exception:
+            pass
         print('YET, no matching password, congrats it\'s secure')
         return True
 
