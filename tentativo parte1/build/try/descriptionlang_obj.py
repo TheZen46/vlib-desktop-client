@@ -10,7 +10,7 @@ class DescriptionLang(Frame):
         self.char_count = StringVar()
         self.char_count.set("You have no description, so sad...")
 
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame1")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame1"
 
         self.canvas = Canvas(
             self,
@@ -377,7 +377,7 @@ class DescriptionLang(Frame):
         elif char_count == 0:
             self.char_count.set("You have no description, so sad...")
         elif char_count == 69 or char_count== 104:
-            self.char_count.set(f"You've written {char_count} of 400 characters available\nyou are so stupid, come on kiddo")
+            self.char_count.set(f"Character limit exceeded: {char_count}/400. Please shorten your description.")
         else:
             self.char_count_label.config(fg="#fdf500")
             self.char_count.set(f"You've written {char_count} of 400 characters available")
