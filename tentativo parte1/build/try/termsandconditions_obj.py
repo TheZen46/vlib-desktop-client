@@ -1,3 +1,4 @@
+# [2024-DEV Stage 1/2]: refactor(terms): load terms&conditions.txt into scrollable custom text box
 from pathlib import Path
 from tkinter import Pack, Checkbutton, BooleanVar, DISABLED, Scrollbar, IntVar, Label, filedialog, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage, StringVar, OptionMenu
 from tkinter import ttk
@@ -15,7 +16,7 @@ class TermsAndConditions(Frame):
         self.OUTPUT_PATH = OUTPUT_PATH
         
         
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame2")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame2"
 
         self.canvas = Canvas(
             self,
@@ -266,7 +267,7 @@ class TermsAndConditions(Frame):
             width=261,
             height=63,
             relative_to_assets= self.relative_to_assets,
-            text_file= r'D:\partizione alessandro\programmi+\tentativo parte1\terms&conditions.txt',
+            text_file= str(Path(__file__).resolve().parent.parent.parent / 'terms&conditions.txt'),
             font_size=7,
             font_style='Arial',
             bg_color='#200628',
@@ -476,8 +477,11 @@ class TermsAndConditions(Frame):
                     self.configure(scrollregion=self.bbox("all"))
 
         def insert_text_from_file(self, filename):
-            with open(filename, "r") as file:
-                text = file.read()
+            try:
+                with open(filename, "r", encoding="utf-8", errors="replace") as file:
+                    text = file.read()
+            except Exception:
+                text = "Termini e Condizioni d'Uso: Accettazione dei Termini e Condizioni della piattaforma di gioco Las Purgas."
             self.textbox.delete("1.0", "end")
             self.textbox.insert("1.0", text)
 
