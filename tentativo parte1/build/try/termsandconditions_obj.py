@@ -1,4 +1,3 @@
-# [2024-DEV Stage 1/2]: refactor(terms): load terms&conditions.txt into scrollable custom text box
 from pathlib import Path
 from tkinter import Pack, Checkbutton, BooleanVar, DISABLED, Scrollbar, IntVar, Label, filedialog, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage, StringVar, OptionMenu
 from tkinter import ttk
