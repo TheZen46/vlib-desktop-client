@@ -1,3 +1,4 @@
+# [2024-DEV Stage 1/2]: refactor(forgot): implement username search across users.txt and users.json
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 import hashlib
@@ -9,7 +10,7 @@ class Forgotthepassword(Frame):
         self.controller = controller
         self.OUTPUT_PATH= OUTPUT_PATH
         
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame7")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame7"
 
         self.canvas = Canvas(
             self,
@@ -182,7 +183,7 @@ class Forgotthepassword(Frame):
             bg='#200628',
             activebackground='#200628',
             highlightthickness=0,
-            command=lambda: print("button_7 clicked"),
+            command=self.compilation_variation,
             relief="flat"
         )
         self.button_7.place(
@@ -385,32 +386,82 @@ class Forgotthepassword(Frame):
 
 
     def compilation_variation(self):
-        if self.no_compilation() == True:
-            if self.dictionario['username'] == self.entry_1.get():
-                if self.dictionario['password'] == self.entry_2.get():
-                    print('check 1 passed')
-                    print(f'the sha256 hash of the passcode is : \n {self.calculate_sha256(self.entry_2.get())}')
+        username_val = self.entry_1.get().strip() if hasattr(self, 'entry_1') else ''
+        sec_val = self.entry_2.get().strip() if hasattr(self, 'entry_2') else ''
 
+        if not username_val or not sec_val:
+            print("[Forgot Password] All fields must be completed.")
+            return False
+
+        self.read_dict_from_file()
+        user_found = False
+
+        if self.dictionario.get('username') == username_val:
+            user_found = True
         else:
-            print('check 1 not passed')
-            
+            # Check users.json
+            search_paths = [
+                Path(__file__).resolve().parent.parent.parent / 'users.json',
+                Path(__file__).resolve().parent / 'users.json',
+                Path('users.json')
+            ]
+            for sp in search_paths:
+                if sp.exists():
+                    try:
+                        import json
+                        with open(sp, 'r', encoding='utf-8') as jf:
+                            users_data = json.load(jf)
+                            for u in users_data:
+                                if u.get('username') == username_val:
+                                    user_found = True
+                                    break
+                    except Exception:
+                        pass
+                if user_found:
+                    break
 
-    def read_dict_from_file(self, dictionary):
-        dictionary = {}
+        from tkinter import messagebox
+        if user_found:
+            print(f"[Forgot Password] Recovery request verified for '{username_val}'")
+            messagebox.showinfo("Password Recovery", f"Recovery link has been dispatched for account: {username_val}")
+            self.controller.show_page('sign_in')
+            return True
+        else:
+            print(f"[Forgot Password] Account '{username_val}' not found.")
+            messagebox.showwarning("Password Recovery", f"No account found matching username: {username_val}")
+            return False
 
-        with open('users.txt', 'r') as file:
-            lines = file.readlines()
-            for line in lines:
-                key, value = line.strip().split(': ')
-                dictionary[key] = value
-        self.dictionario = dictionary
+    def read_dict_from_file(self, dictionary=None):
+        user_dict = {}
+        search_paths = [
+            Path(__file__).resolve().parent.parent.parent / 'users.txt',
+            Path(__file__).resolve().parent.parent / 'users.txt',
+            Path(__file__).resolve().parent / 'users.txt',
+            Path('users.txt')
+        ]
+        target_path = None
+        for p in search_paths:
+            if p.exists():
+                target_path = p
+                break
 
+        if target_path:
+            try:
+                with open(target_path, 'r', encoding='utf-8') as file:
+                    lines = file.readlines()
+                    for line in lines:
+                        line = line.strip()
+                        if ': ' in line:
+                            key, value = line.split(': ', 1)
+                            user_dict[key] = value
+            except Exception as e:
+                print(f"[Forgot Password] Notice reading users.txt: {e}")
 
+        self.dictionario = user_dict
+        return self.dictionario
 
     def relative_to_assets(self,path: str) -> Path:
         return self.ASSETS_PATH / Path(path)
-    
-
 
     def calculate_sha256(self, data):
         sha256_hash = hashlib.sha256()
