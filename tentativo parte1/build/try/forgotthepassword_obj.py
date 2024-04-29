@@ -1,4 +1,3 @@
-# [2024-DEV Stage 1/2]: refactor(forgot): implement username search across users.txt and users.json
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 import hashlib
