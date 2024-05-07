@@ -24,3 +24,17 @@ AVAILABLE_MODS = [
     },
     {
         "id": "holo_dice",
+        "name": "High-Roller Hologram Dice",
+        "version": "v3.0",
+        "desc": "3D particle emitter and cyber glow animations for dice rolls.",
+        "category": "Visuals"
+    },
+    {
+        "id": "neural_hack",
+        "name": "Neural Net Fast-Hack Tools",
+        "version": "v1.2",
+        "desc": "Visual exploit matrix and terminal speed-assist for hacking.",
+        "category": "Tools"
+    }
+]
+
