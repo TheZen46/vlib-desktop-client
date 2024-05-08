@@ -38,3 +38,16 @@ AVAILABLE_MODS = [
     }
 ]
 
+
+class ProfileManager:
+    def __init__(self, controller=None):
+        self.controller = controller
+        self.profile_dir = Path(__file__).resolve().parent.parent.parent / "local_temp_files"
+        self.profile_dir.mkdir(parents=True, exist_ok=True)
+        self.profile_file = self.profile_dir / "user_profile.json"
+        self.tickets_file = self.profile_dir / "support_tickets.json"
+
+        self.default_data = {
+            "username": "thezen46",
+            "credits": 2500,
+            "rank": "LVL 5",
