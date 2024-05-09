@@ -51,3 +51,17 @@ class ProfileManager:
             "username": "thezen46",
             "credits": 2500,
             "rank": "LVL 5",
+            "member_id": "#0046",
+            "is_vip": False,
+            "active_language": "ENG",
+            "active_mods": ["neon_reshade", "night_radio"],
+            "installed_mods": [
+                "Cyberpunk Night City HUD v2.1",
+                "Enhanced Shader Pack (Neon Edition)"
+            ],
+            "last_daily_claim": 0,
+            "sound_fx_enabled": True
+        }
+        self.data = self.load_profile()
+
+    def load_profile(self) -> dict:
