@@ -65,3 +65,16 @@ class ProfileManager:
         self.data = self.load_profile()
 
     def load_profile(self) -> dict:
+        if self.profile_file.exists():
+            try:
+                with open(self.profile_file, "r", encoding="utf-8") as f:
+                    saved = json.load(f)
+                    merged = dict(self.default_data)
+                    merged.update(saved)
+                    if "active_mods" not in merged:
+                        merged["active_mods"] = list(self.default_data["active_mods"])
+                    return merged
+            except Exception as e:
+                print(f"[Profile Manager] Notice loading profile: {e}")
+        return dict(self.default_data)
+
