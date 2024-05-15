@@ -78,3 +78,17 @@ class ProfileManager:
                 print(f"[Profile Manager] Notice loading profile: {e}")
         return dict(self.default_data)
 
+    def save_profile(self):
+        try:
+            with open(self.profile_file, "w", encoding="utf-8") as f:
+                json.dump(self.data, f, indent=4)
+        except Exception as e:
+            print(f"[Profile Manager] Failed saving profile: {e}")
+
+    def set_user(self, username: str):
+        if not username:
+            return
+        self.data["username"] = username
+        if username.lower() == "thezen46":
+            self.data["rank"] = "ADMIN #0046"
+            self.data["is_vip"] = True
