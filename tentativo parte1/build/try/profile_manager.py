@@ -92,3 +92,16 @@ class ProfileManager:
         if username.lower() == "thezen46":
             self.data["rank"] = "ADMIN #0046"
             self.data["is_vip"] = True
+        elif username.lower() == "poldo":
+            self.data["rank"] = "VIP #0012"
+            self.data["is_vip"] = True
+        elif username.lower() == "scandaloah":
+            self.data["rank"] = "PRO #0077"
+        else:
+            self.data["rank"] = f"MEMBER #{abs(hash(username)) % 1000:04d}"
+        self.save_profile()
+
+    def get_username(self) -> str:
+        return self.data.get("username", "Guest")
+
+    def get_credits(self) -> int:
