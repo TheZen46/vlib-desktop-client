@@ -105,3 +105,16 @@ class ProfileManager:
         return self.data.get("username", "Guest")
 
     def get_credits(self) -> int:
+        return int(self.data.get("credits", 0))
+
+    def get_formatted_credits(self) -> str:
+        return f"{self.get_credits():,} CR"
+
+    def get_rank(self) -> str:
+        return str(self.data.get("rank", "MEMBER #0001"))
+
+    def is_vip(self) -> bool:
+        return bool(self.data.get("is_vip", False))
+
+    def set_vip(self, active: bool = True):
+        self.data["is_vip"] = active
