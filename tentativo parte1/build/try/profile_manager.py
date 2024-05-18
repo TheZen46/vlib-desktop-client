@@ -118,3 +118,17 @@ class ProfileManager:
 
     def set_vip(self, active: bool = True):
         self.data["is_vip"] = active
+        if active and "VIP" not in self.data.get("rank", ""):
+            self.data["rank"] = f"VIP {self.data.get('rank', '#0001')}"
+        self.save_profile()
+
+    def add_credits(self, amount: int) -> int:
+        if amount > 0:
+            self.data["credits"] = self.get_credits() + amount
+            self.save_profile()
+            print(f"[Profile Manager] Added {amount} CR. New balance: {self.get_formatted_credits()}")
+        return self.get_credits()
+
+    def spend_credits(self, amount: int) -> bool:
+        if 0 < amount <= self.get_credits():
+            self.data["credits"] = self.get_credits() - amount
