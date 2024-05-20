@@ -132,3 +132,16 @@ class ProfileManager:
     def spend_credits(self, amount: int) -> bool:
         if 0 < amount <= self.get_credits():
             self.data["credits"] = self.get_credits() - amount
+            self.save_profile()
+            print(f"[Profile Manager] Spent {amount} CR. New balance: {self.get_formatted_credits()}")
+            return True
+        return False
+
+    def claim_daily_allowance(self) -> tuple:
+        """
+        Awards a daily credit dividend (+250 CR base, +500 CR for VIPs).
+        Returns: (success: bool, reward: int, balance: int, message: str)
+        """
+        now = time.time()
+        last_claim = float(self.data.get("last_daily_claim", 0))
+        cooldown = 86400  # 24 hours
