@@ -145,3 +145,17 @@ class ProfileManager:
         now = time.time()
         last_claim = float(self.data.get("last_daily_claim", 0))
         cooldown = 86400  # 24 hours
+
+        if now - last_claim < cooldown:
+            remaining = int(cooldown - (now - last_claim))
+            hours = remaining // 3600
+            minutes = (remaining % 3600) // 60
+            msg = f"Dividend on cooldown. Check back in {hours}h {minutes}m."
+            return (False, 0, self.get_credits(), msg)
+
+        reward = 500 if self.is_vip() else 250
+        self.data["last_daily_claim"] = now
+        self.add_credits(reward)
+        vip_tag = " (VIP 2x Bonus!)" if self.is_vip() else ""
+        msg = f"Daily Syndicate Dividend Claimed! +{reward} CR{vip_tag}"
+        return (True, reward, self.get_credits(), msg)
