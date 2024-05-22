@@ -159,3 +159,16 @@ class ProfileManager:
         vip_tag = " (VIP 2x Bonus!)" if self.is_vip() else ""
         msg = f"Daily Syndicate Dividend Claimed! +{reward} CR{vip_tag}"
         return (True, reward, self.get_credits(), msg)
+
+    def get_available_mods(self) -> list:
+        return AVAILABLE_MODS
+
+    def is_mod_active(self, mod_id: str) -> bool:
+        return mod_id in self.data.get("active_mods", [])
+
+    def toggle_mod(self, mod_id: str) -> bool:
+        active = self.data.setdefault("active_mods", [])
+        if mod_id in active:
+            active.remove(mod_id)
+            status = False
+        else:
