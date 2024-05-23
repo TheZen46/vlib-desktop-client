@@ -172,3 +172,17 @@ class ProfileManager:
             active.remove(mod_id)
             status = False
         else:
+            active.append(mod_id)
+            status = True
+        self.save_profile()
+        return status
+
+    def get_active_mods(self) -> list:
+        return list(self.data.get("active_mods", []))
+
+    def is_sound_enabled(self) -> bool:
+        return bool(self.data.get("sound_fx_enabled", True))
+
+    def toggle_sound(self) -> bool:
+        new_state = not self.is_sound_enabled()
+        self.data["sound_fx_enabled"] = new_state
