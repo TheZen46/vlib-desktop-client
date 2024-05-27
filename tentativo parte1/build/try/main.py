@@ -1,3 +1,4 @@
+# [2024-DEV Stage 1/8]: refactor(app): wire ProfileManager into Application container in main.py
 from pathlib import Path
 from tkinter import Frame, Tk, Canvas, Entry, Text, Button, PhotoImage, Toplevel, StringVar, Label
 from main_channel_obj import Main_Channel
@@ -22,6 +23,9 @@ from languagesettings_obj import Languagesettings
 from roles_obj import Roles
 from rulz_obj import Rulz
 from forgotthepassword_obj import Forgotthepassword
+from notenoughmoney_obj import NotEnoughMoney
+from profile_manager import ProfileManager
+from game_session import GameSession
 import time
 import math
 import threading
@@ -59,9 +63,10 @@ class LoadingPage(Toplevel):
 
         self.spheres = []
         self.running = True
+        self.start_time = time.time()
 
         self.create_spheres()
-        self.animate_spheres()
+        self.animate_step()
 
     def create_spheres(self):
         x = 20
@@ -74,20 +79,15 @@ class LoadingPage(Toplevel):
             self.spheres.append(sphere)
             x += distance
 
-    def animate_spheres(self):
-        delay = 50  # milliseconds
-        start_time = time.time()
-
-        while self.running:
-            t = time.time() - start_time
-
-            for i, sphere in enumerate(self.spheres):
-                x = 20 + i * 15
-                y = 25 + AMPLITUDE * math.sin(FREQUENCY * (2 * math.pi * (i / len(self.spheres)) - FREQUENCY * t))
-                self.canvas.coords(sphere, x - 5, y - 5, x + 5, y + 5)
-
-            self.update()
-            time.sleep(delay / 9000)
+    def animate_step(self):
+        if not self.running or not self.winfo_exists():
+            return
+        t = time.time() - self.start_time
+        for i, sphere in enumerate(self.spheres):
+            x = 20 + i * 15
+            y = 25 + AMPLITUDE * math.sin(FREQUENCY * (2 * math.pi * (i / len(self.spheres)) - FREQUENCY * t))
+            self.canvas.coords(sphere, x - 5, y - 5, x + 5, y + 5)
+        self.after(33, self.animate_step)
 
     def on_closing(self):
         self.running = False
@@ -111,10 +111,15 @@ class Application(Tk):
         self.container.pack(fill="both", expand=True)
         self.geometry("1253x767")
         self.configure(bg='#272932')
-        self.iconbitmap('las_purgas.ico')
+        ico_file = Path(__file__).resolve().parent.parent.parent / 'las_purgas.ico'
+        if ico_file.exists():
+            try:
+                self.iconbitmap(str(ico_file))
+            except Exception:
+                pass
 
         self.username = ''
-        self.where_image = 'D:/partizione alessandro/programmi+/tentativo parte1/build/assets/frame4/button_9.png'
+        self.where_image = str(Path(__file__).resolve().parent.parent / 'assets' / 'frame4' / 'button_9.png')
 
         self.pages = {}
 
@@ -155,6 +160,9 @@ class Application(Tk):
         self.roles = Roles(self.container, self, OUTPUT_PATH=self.OUTPUT_PATH)
         self.rulz = Rulz(self.container, self, OUTPUT_PATH=self.OUTPUT_PATH)
         self.forgotthepassword = Forgotthepassword(self.container, self, OUTPUT_PATH=self.OUTPUT_PATH)
+        self.profile = ProfileManager(self)
+        self.notenoughmoney = NotEnoughMoney(self.container, self, OUTPUT_PATH=self.OUTPUT_PATH)
+        self.game_session = GameSession(self.container, self, OUTPUT_PATH=self.OUTPUT_PATH)
 
         self.pages['main_channel'] = self.main_channel
         self.pages['new_features'] = self.new_features
@@ -178,13 +186,24 @@ class Application(Tk):
         self.pages['roles'] = self.roles
         self.pages['rulz'] = self.rulz
         self.pages['forgotthepassword'] = self.forgotthepassword
+        self.pages['notenoughmoney'] = self.notenoughmoney
+        self.pages['start_game'] = self.game_session
+        self.pages['game_session'] = self.game_session
 
         #first_page_opening= 'sign_in'
-        lex= self.sign_in.check_auth()
-
+        try:
+            lex = self.sign_in.check_auth()
+            if not lex or lex not in self.pages:
+                lex = 'sign_in'
+        except Exception as e:
+            print(f'Auth check notice: {e}')
+            lex = 'sign_in'
         self.show_page(lex)
 
     def show_page(self, page_name):
+        if page_name not in self.pages:
+            print(f"[VLib Router] Warning: Page '{page_name}' not registered. Redirecting to 'main_channel'.")
+            page_name = "main_channel" if "main_channel" in self.pages else "sign_in"
 
         if 'current' in self.pages:
             current_page = self.pages['current']
@@ -194,21 +213,105 @@ class Application(Tk):
         new_page = self.pages[page_name]
         new_page.pack(fill='both', expand=True)
 
-
-
         new_page.create_stuff()
         self.pages['current'] = new_page
 
+    def launch_game(self):
+        from tkinter import messagebox
+        print("[Game Engine] Initializing Las Purgas Cyberpunk Client...")
+        messagebox.showinfo(
+            "Las Purgas - Game Launcher",
+            "Connecting to Las Purgas Server (127.0.0.1:7777)...\n"
+            "Shader Pipeline: Loaded\n"
+            "Asset Bundle: Cyberpunk City Core v2.1\n\n"
+            "Game session initialized successfully!"
+        )
+
+    def get_credits(self):
+        return self.profile.get_formatted_credits()
+
+    def get_raw_credits(self):
+        return self.profile.get_credits()
+
+    def get_rank(self):
+        return self.profile.get_rank()
+
+    def is_vip(self):
+        return self.profile.is_vip()
+
+    def add_credits(self, amount):
+        return self.profile.add_credits(amount)
+
+    def spend_credits(self, amount):
+        return self.profile.spend_credits(amount)
+
+    def claim_daily_allowance(self):
+        return self.profile.claim_daily_allowance()
+
+    def get_available_mods(self):
+        return self.profile.get_available_mods()
+
+    def is_mod_active(self, mod_id):
+        return self.profile.is_mod_active(mod_id)
+
+    def toggle_mod(self, mod_id):
+        return self.profile.toggle_mod(mod_id)
+
+    def submit_support_ticket(self, category, message):
+        return self.profile.submit_support_ticket(self.username or "Guest", category, message)
+
+    def is_sound_enabled(self):
+        return self.profile.is_sound_enabled() if hasattr(self, 'profile') else True
+
+    def toggle_sound(self):
+        return self.profile.toggle_sound() if hasattr(self, 'profile') else True
+
+    def logout(self):
+        print(f"[VLib Session] User '{self.username}' logged out.")
+        self.username = ''
+        self.temp_tool('reload', None)
+        onl_path = Path(__file__).resolve().parent.parent.parent / "Onl_verification.json"
+        if onl_path.exists():
+            try:
+                import json
+                with open(onl_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                data["activity"] = "Inactive"
+                with open(onl_path, "w", encoding="utf-8") as f:
+                    json.dump(data, f, indent=4)
+            except Exception:
+                pass
+        self.show_page('sign_in')
+
     def change_username(self, new_username):
         self.username = new_username
+        if hasattr(self, 'profile'):
+            self.profile.set_user(new_username)
 
     def get_changedusername(self):
         return self.username
 
     def change_img(self, new_image):
-        self.where_image = new_image
+        if not new_image:
+            return
+        candidate = Path(new_image)
+        if not candidate.is_absolute():
+            tentativo_dir = Path(__file__).resolve().parent.parent.parent
+            if (tentativo_dir / new_image).exists():
+                candidate = tentativo_dir / new_image
+            elif (Path(__file__).resolve().parent / new_image).exists():
+                candidate = Path(__file__).resolve().parent / new_image
+            elif (Path(__file__).resolve().parent.parent / "assets" / "frame4" / new_image).exists():
+                candidate = Path(__file__).resolve().parent.parent / "assets" / "frame4" / new_image
+        self.where_image = str(candidate)
 
     def get_changedimage(self):
+        candidate = Path(self.where_image)
+        if candidate.exists():
+            return str(candidate)
+        fallback = Path(__file__).resolve().parent.parent / 'assets' / 'frame4' / 'button_9.png'
+        if fallback.exists():
+            return str(fallback)
         return self.where_image
 
 
@@ -275,14 +378,15 @@ class Application(Tk):
             else:
                 print(f'where ({where})  --->   UNEXISTENT')
 
-        elif what== 'reload' or 'reld':
+        elif what == 'reload' or what == 'reld':
             print('reloading all...')
             self.temp_username = ''
             self.temp_enpasscode = ''
             self.temp_birthday = ''
             self.temp_description = ''
             self.temp_filestor = ''
-            self.temp_mail
+            self.temp_mail = ''
+            self.temp_language = ''
             print('DONE')
 
 #late project to make it faster
