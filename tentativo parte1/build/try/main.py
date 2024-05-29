@@ -1,4 +1,4 @@
-# [2024-DEV Stage 1/8]: refactor(app): wire ProfileManager into Application container in main.py
+# [2024-DEV Stage 2/8]: refactor(app): delegate get_credits and spend_credits from Application to ProfileManager
 from pathlib import Path
 from tkinter import Frame, Tk, Canvas, Entry, Text, Button, PhotoImage, Toplevel, StringVar, Label
 from main_channel_obj import Main_Channel
