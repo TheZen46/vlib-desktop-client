@@ -1,4 +1,4 @@
-# [2024-DEV Stage 2/8]: refactor(app): delegate get_credits and spend_credits from Application to ProfileManager
+# [2024-DEV Stage 3/8]: refactor(app): delegate claim_daily_allowance to ProfileManager
 from pathlib import Path
 from tkinter import Frame, Tk, Canvas, Entry, Text, Button, PhotoImage, Toplevel, StringVar, Label
 from main_channel_obj import Main_Channel
