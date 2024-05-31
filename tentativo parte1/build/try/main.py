@@ -1,4 +1,4 @@
-# [2024-DEV Stage 3/8]: refactor(app): delegate claim_daily_allowance to ProfileManager
+# [2024-DEV Stage 4/8]: refactor(app): implement clean user logout and session invalidation in Application
 from pathlib import Path
 from tkinter import Frame, Tk, Canvas, Entry, Text, Button, PhotoImage, Toplevel, StringVar, Label
 from main_channel_obj import Main_Channel
