@@ -1,4 +1,4 @@
-# [2024-DEV Stage 5/8]: refactor(app): delegate audio toggle state between Application and ProfileManager
+# [2024-DEV Stage 6/8]: refactor(app): enhance Application router with dynamic view registration in main.py
 from pathlib import Path
 from tkinter import Frame, Tk, Canvas, Entry, Text, Button, PhotoImage, Toplevel, StringVar, Label
 from main_channel_obj import Main_Channel
