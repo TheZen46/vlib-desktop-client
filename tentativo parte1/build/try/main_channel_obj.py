@@ -1,3 +1,4 @@
+# [2024-DEV Stage 1/7]: refactor(channel): hook main_channel_obj.py to dynamic wallet credits canvas
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 
@@ -7,7 +8,7 @@ class Main_Channel(Frame):
         self.controller = controller
         self.OUTPUT_PATH= OUTPUT_PATH
         self.username_gave = username_gave
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame8")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame8"
 
         self.canvas = Canvas(
             self,
@@ -158,7 +159,7 @@ class Main_Channel(Frame):
             activebackground='#272932',
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print('button clicked'),
+            command=self.refresh_channel_view,
             relief="flat"
         )
         self.MainChannel.place(
@@ -187,6 +188,27 @@ class Main_Channel(Frame):
             height=45.0
         )
         self.buttons_list.append(self.STARTgame)
+
+        self.daily_bonus_btn = Button(
+            self,
+            text="CLAIM DAILY CR",
+            bg="#200628",
+            fg="#FDF500",
+            activebackground="#9370DB",
+            activeforeground="#FFFFFF",
+            font=("Arial", 10, "bold"),
+            relief="ridge",
+            bd=1,
+            cursor="hand2",
+            command=self.on_claim_daily_clicked
+        )
+        self.daily_bonus_btn.place(
+            x=925.0,
+            y=585.0,
+            width=155.0,
+            height=45.0
+        )
+        self.buttons_list.append(self.daily_bonus_btn)
 
 
         #IMAGES
@@ -283,11 +305,11 @@ class Main_Channel(Frame):
         )
         self.texts_list.append(self.Title)
 
-        self.Amount= self.canvas.create_text(
+        self.Amount = self.canvas.create_text(
             648.0,
             449.0,
             anchor="nw",
-            text="Amount",
+            text=self.controller.get_credits() if hasattr(self.controller, 'get_credits') else "2,500 CR",
             fill="#FDF500",
             font=("RussoOne Regular", 20 * -1)
         )
@@ -303,11 +325,11 @@ class Main_Channel(Frame):
         )
         self.texts_list.append(self.name)
 
-        self.nomber= self.canvas.create_text(
+        self.nomber = self.canvas.create_text(
             984.0,
             411.0,
             anchor="nw",
-            text="nomber",
+            text=self.controller.get_rank() if hasattr(self.controller, 'get_rank') else "LVL 5",
             fill="#FDF500",
             font=("RussoOne Regular", 20 * -1)
         )
@@ -349,6 +371,32 @@ class Main_Channel(Frame):
         self.texts_list = []
 
 
+
+    def on_claim_daily_clicked(self):
+        from tkinter import messagebox
+        if hasattr(self.controller, 'claim_daily_allowance'):
+            success, reward, balance, msg = self.controller.claim_daily_allowance()
+            if hasattr(self, 'Amount'):
+                self.canvas.itemconfig(self.Amount, text=self.controller.get_credits())
+            try:
+                from theme import play_cyber_sound
+                if success:
+                    play_cyber_sound("claim", enabled=self.controller.is_sound_enabled())
+            except Exception:
+                pass
+            messagebox.showinfo("Syndicate Dividend", msg)
+        else:
+            messagebox.showinfo("Syndicate Dividend", "Daily allowance service unavailable.")
+
+    def refresh_channel_view(self):
+        if hasattr(self, 'Amount') and hasattr(self.controller, 'get_credits'):
+            self.canvas.itemconfig(self.Amount, text=self.controller.get_credits())
+        if hasattr(self, 'nomber') and hasattr(self.controller, 'get_rank'):
+            self.canvas.itemconfig(self.nomber, text=self.controller.get_rank())
+        if hasattr(self, 'name') and hasattr(self.controller, 'get_changedusername'):
+            self.canvas.itemconfig(self.name, text=self.controller.get_changedusername())
+        if hasattr(self, 'name_rev') and hasattr(self.controller, 'get_changedusername'):
+            self.canvas.itemconfig(self.name_rev, text=self.controller.get_changedusername())
 
     def relative_to_assets(self,path: str) -> Path:
         return self.ASSETS_PATH / Path(path)
