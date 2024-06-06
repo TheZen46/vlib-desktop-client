@@ -1,4 +1,4 @@
-# [2024-DEV Stage 1/7]: refactor(channel): hook main_channel_obj.py to dynamic wallet credits canvas
+# [2024-DEV Stage 2/7]: refactor(channel): update operative rank badge dynamically in main_channel_obj.py
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 
