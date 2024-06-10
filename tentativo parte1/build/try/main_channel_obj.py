@@ -1,4 +1,4 @@
-# [2024-DEV Stage 2/7]: refactor(channel): update operative rank badge dynamically in main_channel_obj.py
+# [2024-DEV Stage 3/7]: refactor(channel): update active username badge on main_channel canvas
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 
