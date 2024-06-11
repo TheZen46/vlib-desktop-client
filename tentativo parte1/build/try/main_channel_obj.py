@@ -1,4 +1,4 @@
-# [2024-DEV Stage 3/7]: refactor(channel): update active username badge on main_channel canvas
+# [2024-DEV Stage 4/7]: feat(channel): add interactive [ CLAIM DAILY CR ] button to main_channel_obj.py
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 
