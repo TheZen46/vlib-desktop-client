@@ -1,4 +1,4 @@
-# [2024-DEV Stage 4/7]: feat(channel): add interactive [ CLAIM DAILY CR ] button to main_channel_obj.py
+# [2024-DEV Stage 5/7]: feat(channel): integrate synthesized claim audio effect on dividend collection
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 
