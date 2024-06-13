@@ -1,4 +1,4 @@
-# [2024-DEV Stage 5/7]: feat(channel): integrate synthesized claim audio effect on dividend collection
+# [2024-DEV Stage 6/7]: refactor(channel): add real-time balance canvas refresh on channel mount
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 
