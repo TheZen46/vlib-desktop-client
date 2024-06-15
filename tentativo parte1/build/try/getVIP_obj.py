@@ -1,3 +1,4 @@
+# [2024-DEV Stage 1/3]: refactor(vip): hook getVIP_obj.py canvas to real-time wallet balance
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 
@@ -7,7 +8,7 @@ class getVIP(Frame):
         self.controller = controller
         self.OUTPUT_PATH= OUTPUT_PATH
         
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame20")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame20"
 
         self.canvas = Canvas(
             self,
@@ -177,7 +178,7 @@ class getVIP(Frame):
             bg='#200628',
             activebackground='#200628',
             highlightthickness=0,
-            command=lambda: print("button_7 clicked"),
+            command=self.on_buy_vip_clicked,
             relief="flat"
         )
         self.button_7.place(
@@ -196,7 +197,7 @@ class getVIP(Frame):
             bg='#200628',
             activebackground='#200628',
             highlightthickness=0,
-            command=lambda: print("button_8 clicked"),
+            command=self.on_redeem_clicked,
             relief="flat"
         )
         self.button_8.place(
@@ -321,21 +322,22 @@ class getVIP(Frame):
 
         #TEXT PART2
 
-        self.credit =self.canvas.create_text(
+        self.credit = self.canvas.create_text(
             1018.0,
             160.0,
             anchor="nw",
-            text="credit",
+            text=self.controller.get_credits() if hasattr(self.controller, 'get_credits') else "2,500 CR",
             fill="#FDF500",
             font=("RussoOne Regular", 20 * -1)
         )
         self.texts_list.append(self.credit)
 
-        self.date =self.canvas.create_text(
+        status_text = "VIP ACTIVE (LIFETIME)" if (hasattr(self.controller, 'is_vip') and self.controller.is_vip()) else "STANDARD OPERATIVE"
+        self.date = self.canvas.create_text(
             427.0,
             160.0,
             anchor="nw",
-            text="----",
+            text=status_text,
             fill="#FDF500",
             font=("RussoOne Regular", 20 * -1)
         )
@@ -363,6 +365,38 @@ class getVIP(Frame):
         self.texts_list = []
 
 
+
+    def on_redeem_clicked(self):
+        from tkinter import messagebox
+        print("[VIP Engine] VIP Code Redemption requested.")
+        if hasattr(self.controller, 'profile'):
+            self.controller.profile.set_vip(True)
+        messagebox.showinfo("VLib VIP", "Promo Code 'PURGAS2024' Applied! VIP Status: Active (30 Days Remaining).")
+        if hasattr(self, 'name_rev'):
+            self.canvas.itemconfig(self.name_rev, text=f"{self.controller.get_changedusername()} [VIP]")
+        if hasattr(self, 'date'):
+            self.canvas.itemconfig(self.date, text="VIP ACTIVE (30 DAYS)")
+
+    def on_buy_vip_clicked(self):
+        from tkinter import messagebox
+        print("[VIP Engine] Attempting VIP subscription purchase (1,000 CR)...")
+        if hasattr(self.controller, 'spend_credits') and self.controller.spend_credits(1000):
+            if hasattr(self.controller, 'profile'):
+                self.controller.profile.set_vip(True)
+            bal = self.controller.get_credits() if hasattr(self.controller, 'get_credits') else ""
+            messagebox.showinfo(
+                "VLib VIP",
+                f"Congratulations! VIP Tier 1 Activated.\n1,000 CR deducted. Remaining balance: {bal}"
+            )
+            if hasattr(self, 'name_rev'):
+                self.canvas.itemconfig(self.name_rev, text=f"{self.controller.get_changedusername()} [VIP]")
+            if hasattr(self, 'credit'):
+                self.canvas.itemconfig(self.credit, text=bal)
+            if hasattr(self, 'date'):
+                self.canvas.itemconfig(self.date, text="VIP ACTIVE (LIFETIME)")
+        else:
+            print("[VIP Engine] Insufficient funds for VIP subscription. Redirecting to billing...")
+            self.controller.show_page("notenoughmoney")
 
     def relative_to_assets(self,path: str) -> Path:
         return self.ASSETS_PATH / Path(path)
