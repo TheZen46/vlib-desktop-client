@@ -1,4 +1,3 @@
-# [2024-DEV Stage 2/3]: refactor(vip): replace static labels with dynamic operative membership tier
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 
