@@ -84,3 +84,46 @@ class NotEnoughMoney(Frame):
             highlightthickness=0,
             command=lambda: self.controller.show_page("howdoesitwork"),
             relief="flat"
+        )
+        self.how.place(x=20.0, y=741.0, width=232.0, height=18.27)
+        self.buttons_list.append(self.how)
+
+        self.options_image = PhotoImage(file=self.relative_to_assets("button_4.png"))
+        self.options = Button(
+            self,
+            image=self.options_image,
+            borderwidth=0,
+            bg='#272932',
+            activebackground='#272932',
+            highlightthickness=0,
+            command=lambda: self.controller.show_page("options"),
+            relief="flat"
+        )
+        self.options.place(x=114.0, y=441.0, width=82.0, height=22.13)
+        self.buttons_list.append(self.options)
+
+        self.features_image = PhotoImage(file=self.relative_to_assets("button_5.png"))
+        self.features = Button(
+            self,
+            image=self.features_image,
+            borderwidth=0,
+            bg='#272932',
+            activebackground='#272932',
+            highlightthickness=0,
+            command=lambda: self.controller.show_page("new_features"),
+            relief="flat"
+        )
+        self.features.place(x=84.0, y=339.0, width=142.1, height=19.38)
+        self.buttons_list.append(self.features)
+
+        self.channel_image = PhotoImage(file=self.relative_to_assets("button_6.png"))
+        self.channel = Button(
+            self,
+            image=self.channel_image,
+            borderwidth=0,
+            bg='#272932',
+            activebackground='#272932',
+            highlightthickness=0,
+            command=lambda: self.controller.show_page("main_channel"),
+            relief="flat"
+        )
