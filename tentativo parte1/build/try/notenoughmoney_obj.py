@@ -127,3 +127,46 @@ class NotEnoughMoney(Frame):
             command=lambda: self.controller.show_page("main_channel"),
             relief="flat"
         )
+        self.channel.place(x=84.0, y=234.0, width=142.0, height=22.0)
+        self.buttons_list.append(self.channel)
+
+        # Action Buttons
+        self.recharge_image = PhotoImage(file=self.relative_to_assets("button_7.png"))
+        self.recharge_button = Button(
+            self,
+            image=self.recharge_image,
+            borderwidth=0,
+            bg='#200628',
+            activebackground='#200628',
+            highlightthickness=0,
+            command=self.on_recharge_clicked,
+            relief="flat"
+        )
+        self.recharge_button.place(x=836.0, y=252.0, width=250.0, height=54.0)
+        self.buttons_list.append(self.recharge_button)
+
+        self.back_image = PhotoImage(file=self.relative_to_assets("button_8.png"))
+        self.back_button = Button(
+            self,
+            image=self.back_image,
+            borderwidth=0,
+            bg='#200628',
+            activebackground='#200628',
+            highlightthickness=0,
+            command=lambda: self.controller.show_page('getVIP'),
+            relief="flat"
+        )
+        self.back_button.place(x=896.0, y=476.0, width=135.0, height=33.39)
+        self.buttons_list.append(self.back_button)
+
+        # Decorative Images
+        self.image_image_2 = PhotoImage(file=self.relative_to_assets("image_2.png"))
+        self.image_2 = self.canvas.create_image(482.0, 69.0, image=self.image_image_2)
+        self.images_list.append(self.image_2)
+
+        self.image_image_3 = PhotoImage(file=self.relative_to_assets("image_3.png"))
+        self.image_3 = self.canvas.create_image(769.0, 411.0, image=self.image_image_3)
+        self.images_list.append(self.image_3)
+
+        self.image_image_4 = PhotoImage(file=self.relative_to_assets("image_4.png"))
+        self.image_4 = self.canvas.create_image(581.0, 367.0, image=self.image_image_4)
