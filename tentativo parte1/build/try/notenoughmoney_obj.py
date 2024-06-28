@@ -170,3 +170,46 @@ class NotEnoughMoney(Frame):
 
         self.image_image_4 = PhotoImage(file=self.relative_to_assets("image_4.png"))
         self.image_4 = self.canvas.create_image(581.0, 367.0, image=self.image_image_4)
+        self.images_list.append(self.image_4)
+
+        self.image_image_5 = PhotoImage(file=self.relative_to_assets("image_5.png"))
+        self.image_5 = self.canvas.create_image(771.0, 609.0, image=self.image_image_5)
+        self.images_list.append(self.image_5)
+
+        self.image_image_6 = PhotoImage(file=self.controller.get_changedimage())
+        self.image_6 = self.canvas.create_image(1162.0, 51.0, image=self.image_image_6)
+        self.images_list.append(self.image_6)
+
+        self.image_image_7 = PhotoImage(file=self.relative_to_assets("image_7.png"))
+        self.image_7 = self.canvas.create_image(1067.0, 171.0, image=self.image_image_7)
+        self.images_list.append(self.image_7)
+
+        self.image_image_8 = PhotoImage(file=self.relative_to_assets("image_8.png"))
+        self.image_8 = self.canvas.create_image(476.0, 171.0, image=self.image_image_8)
+        self.images_list.append(self.image_8)
+
+        self.image_image_9 = PhotoImage(file=self.relative_to_assets("image_9.png"))
+        self.image_9 = self.canvas.create_image(905.0, 170.0, image=self.image_image_9)
+        self.images_list.append(self.image_9)
+
+        self.image_image_10 = PhotoImage(file=self.relative_to_assets("image_10.png"))
+        self.image_10 = self.canvas.create_image(651.0, 170.0, image=self.image_image_10)
+        self.images_list.append(self.image_10)
+
+        self.image_image_11 = PhotoImage(file=self.relative_to_assets("image_11.png"))
+        self.image_11 = self.canvas.create_image(962.0, 366.0, image=self.image_image_11)
+        self.images_list.append(self.image_11)
+
+        # Dynamic Texts
+        self.name_rev = self.canvas.create_text(
+            1105.0,
+            96.0,
+            anchor="nw",
+            text=self.controller.get_changedusername(),
+            fill="#FDF500",
+            font=("RussoOne Regular", 20 * -1)
+        )
+        self.texts_list.append(self.name_rev)
+
+        self.credit_label = self.canvas.create_text(
+            1018.0,
