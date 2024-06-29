@@ -213,3 +213,47 @@ class NotEnoughMoney(Frame):
 
         self.credit_label = self.canvas.create_text(
             1018.0,
+            160.0,
+            anchor="nw",
+            text=self.controller.get_credits() if hasattr(self.controller, "get_credits") else "0 CR",
+            fill="#FDF500",
+            font=("RussoOne Regular", 20 * -1)
+        )
+        self.texts_list.append(self.credit_label)
+
+    def on_recharge_clicked(self):
+        print("[Billing Engine] Opening wallet recharge interface...")
+        if hasattr(self.controller, 'add_credits'):
+            self.controller.add_credits(500)
+        try:
+            from theme import play_cyber_sound
+            play_cyber_sound("recharge", enabled=self.controller.is_sound_enabled())
+        except Exception:
+            pass
+        bal = self.controller.get_credits() if hasattr(self.controller, 'get_credits') else "500 CR"
+        messagebox.showinfo(
+            "VLib Credits",
+            f"Wallet recharge successful!\n+500 Las Purgas Credits added.\nCurrent balance: {bal}"
+        )
+        if hasattr(self, 'credit_label'):
+            self.canvas.itemconfig(self.credit_label, text=bal)
+
+    def destroy_stuff(self):
+        for button in self.buttons_list:
+            button.destroy()
+        self.buttons_list = []
+
+        for image in self.images_list:
+            self.canvas.delete(image)
+        self.images_list = []
+
+        for rectangle in self.rectangle_list:
+            self.canvas.delete(rectangle)
+        self.rectangle_list = []
+
+        for text in self.texts_list:
+            self.canvas.delete(text)
+        self.texts_list = []
+
+    def relative_to_assets(self, path: str) -> Path:
+        return self.ASSETS_PATH / Path(path)
