@@ -1,4 +1,4 @@
-# [2024-DEV Stage 1/8]: refactor(modding): implement 4 interactive mod toggle buttons in modding_obj.py
+# [2024-DEV Stage 2/8]: refactor(modding): display real-time ACTIVE / INACTIVE state badges on modding canvas
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 from tkinter import messagebox
