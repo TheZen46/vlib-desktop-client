@@ -1,4 +1,4 @@
-# [2024-DEV Stage 2/8]: refactor(modding): display real-time ACTIVE / INACTIVE state badges on modding canvas
+# [2024-DEV Stage 3/8]: refactor(modding): add mod launch sandbox verification in modding_obj.py
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 from tkinter import messagebox
