@@ -1,4 +1,4 @@
-# [2024-DEV Stage 3/8]: refactor(modding): add mod launch sandbox verification in modding_obj.py
+# [2024-DEV Stage 4/8]: refactor(modding): synchronize modding view with ProfileManager state
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 from tkinter import messagebox
