@@ -1,4 +1,4 @@
-# [2024-DEV Stage 4/8]: refactor(modding): synchronize modding view with ProfileManager state
+# [2024-DEV Stage 5/8]: refactor(modding): render user avatar and username badge on modding canvas
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 from tkinter import messagebox
