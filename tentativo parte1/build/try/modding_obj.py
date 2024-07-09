@@ -1,4 +1,4 @@
-# [2024-DEV Stage 5/8]: refactor(modding): render user avatar and username badge on modding canvas
+# [2024-DEV Stage 6/8]: refactor(modding): add mod toggle audio feedback
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 from tkinter import messagebox
