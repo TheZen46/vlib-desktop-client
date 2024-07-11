@@ -1,4 +1,4 @@
-# [2024-DEV Stage 6/8]: refactor(modding): add mod toggle audio feedback
+# [2024-DEV Stage 7/8]: refactor(modding): handle mod launch confirmation dialog
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 from tkinter import messagebox
