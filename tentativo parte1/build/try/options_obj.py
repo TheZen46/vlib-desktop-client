@@ -1,3 +1,4 @@
+# [2024-DEV Stage 1/4]: refactor(options): add synthesized master audio toggle button in options_obj.py
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 
@@ -7,7 +8,7 @@ class Options(Frame):
         self.controller = controller
         self.OUTPUT_PATH= OUTPUT_PATH
         
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame10")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame10"
 
         self.canvas = Canvas(
             self,
@@ -177,7 +178,7 @@ class Options(Frame):
             bg='#200628',
             activebackground='#200628',
             highlightthickness=0,
-            command=lambda: self.controller.show_page("KYSbutton"),
+            command=lambda: self.controller.logout(),
             relief="flat"
         )
         self.KYSbutton.place(
@@ -187,6 +188,31 @@ class Options(Frame):
             height=45.0
         )
         self.buttons_list.append(self.KYSbutton)
+
+        sound_on = self.controller.is_sound_enabled() if hasattr(self.controller, 'is_sound_enabled') else True
+        btn_text = "🔊 AUDIO FX: ENABLED" if sound_on else "🔇 AUDIO FX: MUTED"
+        btn_fg = "#50fa7b" if sound_on else "#888888"
+
+        self.audio_toggle_btn = Button(
+            self,
+            text=btn_text,
+            bg="#200628",
+            fg=btn_fg,
+            activebackground="#9370DB",
+            activeforeground="#FFFFFF",
+            font=("Arial", 10, "bold"),
+            relief="ridge",
+            bd=1,
+            cursor="hand2",
+            command=self.on_toggle_audio
+        )
+        self.audio_toggle_btn.place(
+            x=448.0,
+            y=589.0,
+            width=210.0,
+            height=45.0
+        )
+        self.buttons_list.append(self.audio_toggle_btn)
 
         self.Modding_image = PhotoImage(
             file=self.relative_to_assets("button_8.png"))
@@ -333,6 +359,16 @@ class Options(Frame):
         self.images_list.append(self.image_5)
 
 
+
+    def on_toggle_audio(self):
+        from theme import play_cyber_sound
+        if hasattr(self.controller, 'toggle_sound'):
+            new_state = self.controller.toggle_sound()
+            btn_text = "🔊 AUDIO FX: ENABLED" if new_state else "🔇 AUDIO FX: MUTED"
+            btn_fg = "#50fa7b" if new_state else "#888888"
+            self.audio_toggle_btn.config(text=btn_text, fg=btn_fg)
+            if new_state:
+                play_cyber_sound("claim", enabled=True)
 
     def destroy_stuff(self):
         #DESTROY BUTTONS
