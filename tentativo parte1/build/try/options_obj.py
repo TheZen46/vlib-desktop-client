@@ -1,4 +1,4 @@
-# [2024-DEV Stage 1/4]: refactor(options): add synthesized master audio toggle button in options_obj.py
+# [2024-DEV Stage 2/4]: refactor(options): wire audio toggle callback to ProfileManager sound setting
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 
