@@ -1,4 +1,3 @@
-# [2024-DEV Stage 3/4]: refactor(options): update audio toggle button text and color dynamically
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 
