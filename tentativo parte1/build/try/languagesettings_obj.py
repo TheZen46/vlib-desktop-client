@@ -1,3 +1,4 @@
+# [2024-DEV Stage 1/2]: refactor(lang): implement language dropdown list in languagesettings_obj.py
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage, StringVar, OptionMenu
 
@@ -7,7 +8,7 @@ class Languagesettings(Frame):
         self.controller = controller
         self.OUTPUT_PATH= OUTPUT_PATH
         
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame19")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame19"
 
         self.canvas = Canvas(
             self,
@@ -197,7 +198,7 @@ class Languagesettings(Frame):
             bg='#200628',
             activebackground='#200628',
             highlightthickness=0,
-            command=lambda: print("button_8 clicked"),
+            command=self.save_language_preference,
             relief="flat"
         )
         self.button_8.place(
@@ -330,8 +331,8 @@ class Languagesettings(Frame):
         self.entry_place_list.append(self.entry_1)
 
         #DROPDOWN_LIST
-        self.valdrop = ''
-        options = ["ENG", "None", "..."]
+        self.valdrop = 'ENG'
+        options = ["ENG", "ITA", "ESP", "FRA", "DEU", "JPN"]
         self.dropdown_list = CustomDropdown(self, options= options, callback=self.change_valdrop)
         self.dropdown_list.configure(
             borderwidth=0,
@@ -378,6 +379,14 @@ class Languagesettings(Frame):
 
     def temp_datadrop(self):
         print(f'Selected stuff:   {self.valdrop}')
+
+    def save_language_preference(self):
+        from tkinter import messagebox
+        selected_lang = self.valdrop or "ENG"
+        print(f"[Language Engine] Setting system language preference to: {selected_lang}")
+        self.controller.temp_tool('mod', 'lang', selected_lang)
+        messagebox.showinfo("Language Settings", f"Interface language set to: {selected_lang}")
+        self.controller.show_page('options')
 
     def relative_to_assets(self,path: str) -> Path:
         return self.ASSETS_PATH / Path(path)
