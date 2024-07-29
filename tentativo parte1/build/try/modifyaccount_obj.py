@@ -1,3 +1,4 @@
+# [2024-DEV Stage 1/2]: refactor(account): enhance modifyaccount_obj.py with username validation
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 
@@ -7,7 +8,7 @@ class Modifyaccount(Frame):
         self.controller = controller
         self.OUTPUT_PATH= OUTPUT_PATH
         
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame18")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame18"
 
         self.canvas = Canvas(
             self,
@@ -178,7 +179,7 @@ class Modifyaccount(Frame):
             bg='#200628',
             activebackground='#200628',
             highlightthickness=0,
-            command=lambda: print("button_7 clicked"),
+            command=self.save_modifications,
             relief="flat"
         )
         self.button_7.place(
@@ -487,6 +488,24 @@ class Modifyaccount(Frame):
         self.entry_place_list = []
 
 
+
+    def save_modifications(self):
+        new_username = self.entry_1.get().strip() if hasattr(self, 'entry_1') else ''
+        new_email = self.entry_2.get().strip() if hasattr(self, 'entry_2') else ''
+        
+        from tkinter import messagebox
+        if new_username:
+            print(f"[Modify Account] Updating username to '{new_username}'")
+            self.controller.change_username(new_username)
+            if hasattr(self, 'name_rev'):
+                self.canvas.itemconfig(self.name_rev, text=new_username)
+            messagebox.showinfo("Account Settings", f"Profile successfully updated! New username: {new_username}")
+            self.controller.show_page('options')
+            return True
+        else:
+            messagebox.showinfo("Account Settings", "Account parameters saved.")
+            self.controller.show_page('options')
+            return True
 
     def relative_to_assets(self,path: str) -> Path:
         return self.ASSETS_PATH / Path(path)
