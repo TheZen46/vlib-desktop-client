@@ -1,4 +1,3 @@
-# [2024-DEV Stage 1/2]: refactor(account): enhance modifyaccount_obj.py with username validation
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 
