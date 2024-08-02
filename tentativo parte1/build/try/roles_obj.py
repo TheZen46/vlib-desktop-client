@@ -1,3 +1,4 @@
+# [2024-DEV Stage 1/3]: refactor(roles): render high-contrast cyberpunk role tier cards in roles_obj.py
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 
@@ -7,7 +8,7 @@ class Roles(Frame):
         self.controller = controller
         self.OUTPUT_PATH= OUTPUT_PATH
         
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame16")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame16"
 
         self.canvas = Canvas(
             self,
@@ -177,7 +178,7 @@ class Roles(Frame):
             bg='#200628',
             activebackground='#200628',
             highlightthickness=0,
-            command=lambda: print("button_7 clicked"),
+            command=self.on_accept_roles,
             relief="flat"
         )
         self.button_7.place(
@@ -209,7 +210,49 @@ class Roles(Frame):
 
 
         #TEXT
+        self.name_rev = self.canvas.create_text(
+            1105.0,
+            96.0,
+            anchor="nw",
+            text=self.controller.get_changedusername() if hasattr(self.controller, 'get_changedusername') else "",
+            fill="#FDF500",
+            font=("RussoOne Regular", 20 * -1)
+        )
+        self.texts_list.append(self.name_rev)
 
+        roles = [
+            ("👑 SYSTEM OVERSEER [DEV]", "Full network root privileges, pipeline compiler, and master database administration."),
+            ("🛡️ ENFORCER [MODERATOR]", "Casino lounge dispute resolution, chat moderation, and anti-fraud enforcement."),
+            ("💎 HIGH-ROLLER [VIP]", "Exclusive penthouse casino tables, 2x daily credit dividend, and custom neon avatars."),
+            ("⚡ NETRUNNER [PRO]", "Unlocked modding pipeline sandbox, fast terminal decryptor, and extended radio deck."),
+            ("👤 OPERATIVE [MEMBER]", "Standard access to Las Purgas city district, Cyber Dice tables, and public syndicate channels.")
+        ]
+        start_y = 250.0
+        for i, (title, desc) in enumerate(roles):
+            y = start_y + i * 58.0
+            r_bg = self.canvas.create_rectangle(
+                420.0, y, 980.0, y + 50.0,
+                fill="#181a24", outline="#9370DB", width=1
+            )
+            self.rectangle_list.append(r_bg)
+
+            t_head = self.canvas.create_text(
+                435.0, y + 6.0,
+                anchor="nw",
+                text=title,
+                fill="#FDF500",
+                font=("Arial", 10, "bold")
+            )
+            self.texts_list.append(t_head)
+
+            t_body = self.canvas.create_text(
+                435.0, y + 26.0,
+                anchor="nw",
+                text=desc,
+                fill="#bdc3c7",
+                font=("Arial", 8)
+            )
+            self.texts_list.append(t_body)
 
         #IMAGES
         self.image_image_2 = PhotoImage(
@@ -263,6 +306,12 @@ class Roles(Frame):
         self.texts_list = []
 
 
+
+    def on_accept_roles(self):
+        from tkinter import messagebox
+        print("[Roles Engine] Roles and permissions acknowledged.")
+        messagebox.showinfo("Roles & Permissions", "Roles and server permissions acknowledged!")
+        self.controller.show_page('rules')
 
     def relative_to_assets(self,path: str) -> Path:
         return self.ASSETS_PATH / Path(path)
