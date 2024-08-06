@@ -1,4 +1,3 @@
-# [2024-DEV Stage 2/3]: refactor(roles): display System Overseer, Enforcer, VIP, and Operative roles
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 
