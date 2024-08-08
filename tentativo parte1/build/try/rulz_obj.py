@@ -1,3 +1,4 @@
+# [2024-DEV Stage 1/2]: refactor(rulz): render 5-rule community code of conduct cards in rulz_obj.py
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 
@@ -7,7 +8,7 @@ class Rulz(Frame):
         self.controller = controller
         self.OUTPUT_PATH= OUTPUT_PATH
         
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame15")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame15"
 
         self.canvas = Canvas(
             self,
@@ -177,7 +178,7 @@ class Rulz(Frame):
             bg='#200628',
             activebackground='#200628',
             highlightthickness=0,
-            command=lambda: print("button_7 clicked"),
+            command=self.on_accept_rules,
             relief="flat"
         )
         self.button_7.place(
@@ -209,7 +210,49 @@ class Rulz(Frame):
 
 
         #TEXT
+        self.name_rev = self.canvas.create_text(
+            1105.0,
+            96.0,
+            anchor="nw",
+            text=self.controller.get_changedusername() if hasattr(self.controller, 'get_changedusername') else "",
+            fill="#FDF500",
+            font=("RussoOne Regular", 20 * -1)
+        )
+        self.texts_list.append(self.name_rev)
 
+        rules = [
+            ("§ 01 // FAIR PLAY IN LAS PURGAS", "Memory alteration, automated roll injection, and speed hacks are strictly prohibited."),
+            ("§ 02 // VIRTUAL ECONOMY INTEGRITY", "Credits (CR) are in-game entertainment tokens. Out-of-band trade leads to account freeze."),
+            ("§ 03 // SYNDICATE CODE OF RESPECT", "Civility is mandatory across all radio frequencies, game tables, and operative channels."),
+            ("§ 04 // MOD API COMPLIANCE", "All user-generated modifications must conform to the sandbox rules of the Las Purgas SDK."),
+            ("§ 05 // ACCOUNT CREDENTIAL DISCIPLINE", "Operatives are solely responsible for access keys. Sharing session tokens triggers lockout.")
+        ]
+        start_y = 250.0
+        for i, (heading, desc) in enumerate(rules):
+            y = start_y + i * 58.0
+            r_bg = self.canvas.create_rectangle(
+                420.0, y, 980.0, y + 50.0,
+                fill="#181a24", outline="#9370DB", width=1
+            )
+            self.rectangle_list.append(r_bg)
+
+            t_head = self.canvas.create_text(
+                435.0, y + 6.0,
+                anchor="nw",
+                text=heading,
+                fill="#FDF500",
+                font=("Arial", 10, "bold")
+            )
+            self.texts_list.append(t_head)
+
+            t_body = self.canvas.create_text(
+                435.0, y + 26.0,
+                anchor="nw",
+                text=desc,
+                fill="#bdc3c7",
+                font=("Arial", 8)
+            )
+            self.texts_list.append(t_body)
 
         #IMAGES
         self.image_image_2 = PhotoImage(
@@ -263,6 +306,12 @@ class Rulz(Frame):
         self.texts_list = []
 
 
+
+    def on_accept_rules(self):
+        from tkinter import messagebox
+        print("[Rules Engine] Community guidelines accepted.")
+        messagebox.showinfo("Community Rules", "Terms and community rules accepted!")
+        self.controller.show_page('rules')
 
     def relative_to_assets(self,path: str) -> Path:
         return self.ASSETS_PATH / Path(path)
