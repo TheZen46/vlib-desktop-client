@@ -1,4 +1,3 @@
-# [2024-DEV Stage 1/2]: refactor(rulz): render 5-rule community code of conduct cards in rulz_obj.py
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 
