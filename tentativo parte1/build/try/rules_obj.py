@@ -7,7 +7,7 @@ class Rules(Frame):
         self.controller = controller
         self.OUTPUT_PATH= OUTPUT_PATH
         
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame11")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame11"
 
         self.canvas = Canvas(
             self,
