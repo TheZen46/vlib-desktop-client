@@ -1,4 +1,4 @@
-# [2024-DEV Stage 1/5]: refactor(contact): restore missing back button (button_9.png) in contact_us_obj.py
+# [2024-DEV Stage 2/5]: refactor(contact): render official syndicate support matrix details on canvas
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 from tkinter import messagebox, simpledialog
