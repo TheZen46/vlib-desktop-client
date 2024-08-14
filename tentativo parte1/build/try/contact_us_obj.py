@@ -1,4 +1,4 @@
-# [2024-DEV Stage 2/5]: refactor(contact): render official syndicate support matrix details on canvas
+# [2024-DEV Stage 3/5]: feat(contact): add interactive support ticket dispatch button in contact_us_obj.py
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 from tkinter import messagebox, simpledialog
