@@ -186,3 +186,16 @@ class ProfileManager:
     def toggle_sound(self) -> bool:
         new_state = not self.is_sound_enabled()
         self.data["sound_fx_enabled"] = new_state
+        self.save_profile()
+        return new_state
+
+    def submit_support_ticket(self, username: str, category: str, message: str) -> dict:
+        ticket_id = f"LP-{int(time.time()) % 100000:05d}"
+        ticket = {
+            "ticket_id": ticket_id,
+            "username": username or self.get_username(),
+            "category": category,
+            "message": message,
+            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "status": "OPEN"
+        }
