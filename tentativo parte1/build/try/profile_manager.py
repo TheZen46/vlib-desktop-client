@@ -199,3 +199,17 @@ class ProfileManager:
             "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
             "status": "OPEN"
         }
+        tickets = []
+        if self.tickets_file.exists():
+            try:
+                with open(self.tickets_file, "r", encoding="utf-8") as f:
+                    tickets = json.load(f)
+            except Exception:
+                tickets = []
+        tickets.append(ticket)
+        try:
+            with open(self.tickets_file, "w", encoding="utf-8") as f:
+                json.dump(tickets, f, indent=4)
+        except Exception as e:
+            print(f"[Profile Manager] Failed to save support ticket: {e}")
+        return ticket
