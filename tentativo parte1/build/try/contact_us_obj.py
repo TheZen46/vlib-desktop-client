@@ -1,4 +1,3 @@
-# [2024-DEV Stage 4/5]: refactor(contact): display ticket dispatch confirmation with unique tracking ID
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 from tkinter import messagebox, simpledialog
