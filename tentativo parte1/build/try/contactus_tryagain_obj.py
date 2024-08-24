@@ -7,7 +7,7 @@ class ContactUs_TryAgain(Frame):
         self.controller = controller
         self.OUTPUT_PATH= OUTPUT_PATH
         
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame13")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame13"
 
         self.canvas = Canvas(
             self,
@@ -192,6 +192,42 @@ class ContactUs_TryAgain(Frame):
         self.buttons_list.append(self.button_9)
 
         #TEXT
+        t1 = self.canvas.create_text(
+            769.0, 275.0,
+            anchor="center",
+            text="REGISTRATION & ONBOARDING DISPATCH",
+            fill="#FDF500",
+            font=("Arial", 16, "bold")
+        )
+        self.texts_list.append(t1)
+
+        t2 = self.canvas.create_text(
+            769.0, 315.0,
+            anchor="center",
+            text="Account Issues:  support@laspurgas.net",
+            fill="#50fa7b",
+            font=("Arial", 12, "bold")
+        )
+        self.texts_list.append(t2)
+
+        t3 = self.canvas.create_text(
+            769.0, 350.0,
+            anchor="center",
+            text="Community Syndicate:  discord.gg/laspurgas",
+            fill="#8be9fd",
+            font=("Arial", 12, "bold")
+        )
+        self.texts_list.append(t3)
+
+        t4 = self.canvas.create_text(
+            769.0, 395.0,
+            anchor="center",
+            text="Need help with your Operative registration or credential verification?\nReach out to the Las Purgas Administration team on Discord.",
+            fill="#cfcfcf",
+            font=("Arial", 10),
+            justify="center"
+        )
+        self.texts_list.append(t4)
 
 
         #IMAGES
@@ -218,6 +254,9 @@ class ContactUs_TryAgain(Frame):
             382.0,
             image=self.image_image_4
         )
+        self.images_list.append(self.image_2)
+        self.images_list.append(self.image_3)
+        self.images_list.append(self.image_4)
 
 
 
