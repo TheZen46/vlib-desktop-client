@@ -1,3 +1,4 @@
+# [2024-DEV Stage 1/2]: refactor(signup): fix TryAgain_SignUp data caching and session binding in tryagain_obj.py
 from pathlib import Path
 from tkinter import Pack, Label, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage, StringVar, OptionMenu
 import hashlib
@@ -12,7 +13,7 @@ class TryAgain_SignUp(Frame):
         self.controller = controller
         self.OUTPUT_PATH= OUTPUT_PATH
         
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame5")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame5"
 
         self.canvas = Canvas(
             self,
@@ -565,11 +566,14 @@ class TryAgain_SignUp(Frame):
         if self.entry_2.get() == '':
             return False
         
-        with open(self.relative_to_assets('all-words.txt'), 'r', encoding='utf-8') as file:
-            for line in file:
-                if line.strip() == self.entry_2.get():
-                    print('so..... you tried a password and that\'s too easy? TRY AGAIN!!')
-                    return False
+        try:
+            with open(self.relative_to_assets('all-words.txt'), 'r', encoding='utf-8', errors='ignore') as file:
+                for line in file:
+                    if line.strip() == self.entry_2.get():
+                        print('so..... you tried a password and that\'s too easy? TRY AGAIN!!')
+                        return False
+        except Exception:
+            pass
         print('YET, no matching password, congrats it\'s secure')
         return True
 
@@ -620,16 +624,27 @@ class TryAgain_SignUp(Frame):
 
 
     def unique_username(self):
-        #this function schould be changed when will be added the server connection.
-        with open('users.json', 'r') as file:
-            content = file.read()
-            users = json.loads(content)
-            for user in users:
-                if user['username'] == self.entry_1.get():
-                    print('username already used')
-                    return False
-            print('no username')
-            return True
+        # Universal path resolver for users.json cache
+        candidates = [
+            Path(__file__).resolve().parent.parent.parent / "users.json",
+            Path(__file__).resolve().parent / "users.json",
+            Path("users.json")
+        ]
+        users = []
+        for c in candidates:
+            if c.exists():
+                try:
+                    with open(c, "r", encoding="utf-8") as file:
+                        users = json.loads(file.read())
+                        break
+                except Exception:
+                    pass
+        for user in users:
+            if isinstance(user, dict) and user.get('username') == self.entry_1.get():
+                print('username already used')
+                return False
+        print('no username')
+        return True
 
     def usname_noworld(self):
         if self.entry_1.get() == '':
@@ -664,6 +679,8 @@ class TryAgain_SignUp(Frame):
             if self.verification_pass() == True:
                 if self.verification_email() == True:
                     if self.verification_date() == True:
+                        self.controller.change_username(self.entry_1.get())
+                        self.set_temp_datas()
                         self.controller.show_page('description_lang')
                     else:
                         self.controller.show_page('tryagain_signup')
@@ -673,6 +690,28 @@ class TryAgain_SignUp(Frame):
                 self.controller.show_page('tryagain_signup')
         else:
             self.controller.show_page('tryagain_signup')
+
+    def set_temp_datas(self):
+        self.controller.temp_tool(
+            what='mod',
+            where='username',
+            how=self.entry_1.get()
+        )
+        self.controller.temp_tool(
+            what='mod',
+            where='passcode',
+            how=self.entry_2.get()
+        )
+        self.controller.temp_tool(
+            what='mod',
+            where='birth',
+            how=f'{self.entry_4.get()}-{self.entry_5.get()}-{self.entry_6.get()}'
+        )
+        self.controller.temp_tool(
+            what='mod',
+            where='email',
+            how=self.entry_3.get()
+        )
 
 
 
