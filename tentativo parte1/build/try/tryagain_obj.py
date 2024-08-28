@@ -1,4 +1,3 @@
-# [2024-DEV Stage 1/2]: refactor(signup): fix TryAgain_SignUp data caching and session binding in tryagain_obj.py
 from pathlib import Path
 from tkinter import Pack, Label, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage, StringVar, OptionMenu
 import hashlib
