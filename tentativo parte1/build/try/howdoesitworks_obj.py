@@ -1,4 +1,10 @@
-import pygame
+# [2024-DEV Stage 1/2]: refactor(how): add user avatar and username profile badge to howdoesitworks_obj.py
+try:
+    import pygame
+    PYGAME_AVAILABLE = True
+except ImportError:
+    pygame = None
+    PYGAME_AVAILABLE = False
 import threading
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
@@ -14,7 +20,7 @@ class HowDoesItWorks(Frame):
         self.controller = controller
         self.OUTPUT_PATH= OUTPUT_PATH
         
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame12")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame12"
 
         self.canvas = Canvas(
             self,
@@ -26,7 +32,11 @@ class HowDoesItWorks(Frame):
             relief = "ridge"
             )
         
-        pygame.mixer.init()
+        if PYGAME_AVAILABLE:
+            try:
+                pygame.mixer.init()
+            except Exception:
+                pass
         self.music_playing = False
 
         self.canvas.place(x = 0, y = 0)
@@ -59,10 +69,20 @@ class HowDoesItWorks(Frame):
         self.loading_progress = 0
 
     def create_stuff(self):
-        if not self.music_playing:
-            pygame.mixer.music.load('elevator_wait.mp3')
-            pygame.mixer.music.play(-1)
-            self.music_playing = True
+        if PYGAME_AVAILABLE and not self.music_playing:
+            try:
+                mp3_candidates = [
+                    Path(__file__).resolve().parent.parent.parent / 'elevator_wait.mp3',
+                    Path('elevator_wait.mp3')
+                ]
+                for p in mp3_candidates:
+                    if p.exists():
+                        pygame.mixer.music.load(str(p))
+                        pygame.mixer.music.play(-1)
+                        self.music_playing = True
+                        break
+            except Exception as e:
+                print(f"[Audio Engine] Notice: {e}")
         
         
         #BUTTONS
@@ -184,9 +204,25 @@ class HowDoesItWorks(Frame):
 
 
         #TEXT
-
+        self.name_rev = self.canvas.create_text(
+            1105.0,
+            96.0,
+            anchor="nw",
+            text=self.controller.get_changedusername() if hasattr(self.controller, 'get_changedusername') else "",
+            fill="#FDF500",
+            font=("RussoOne Regular", 20 * -1)
+        )
+        self.texts_list.append(self.name_rev)
 
         #IMAGES
+        self.image_image_5 = PhotoImage(
+            file=self.controller.get_changedimage())
+        self.image_5 = self.canvas.create_image(
+            1162.0,
+            51.0,
+            image=self.image_image_5
+        )
+        self.images_list.append(self.image_5)
         self.image_image_2 = PhotoImage(
             file=self.relative_to_assets("image_2.png"))
         self.image_2 = self.canvas.create_image(
@@ -215,9 +251,7 @@ class HowDoesItWorks(Frame):
         self.images_list.append(self.image_4)
         
         
-        if self.music_playing:
-            pygame.mixer.music.stop()
-            self.music_playing = False
+
 
     def get_total_loading_progress(self):
         return self.total_loading_progress
@@ -228,6 +262,12 @@ class HowDoesItWorks(Frame):
 
 
     def destroy_stuff(self):
+        if self.music_playing and PYGAME_AVAILABLE:
+            try:
+                pygame.mixer.music.stop()
+            except Exception:
+                pass
+            self.music_playing = False
         #DESTROY BUTTONS
         for button in self.buttons_list:
             button.destroy()
