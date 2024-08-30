@@ -1,4 +1,3 @@
-# [2024-DEV Stage 1/2]: refactor(how): add user avatar and username profile badge to howdoesitworks_obj.py
 try:
     import pygame
     PYGAME_AVAILABLE = True
