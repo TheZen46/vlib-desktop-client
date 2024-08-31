@@ -7,7 +7,7 @@ class New_Features(Frame):
         self.controller = controller
         self.OUTPUT_PATH= OUTPUT_PATH
         
-        self.ASSETS_PATH = self.OUTPUT_PATH / Path(r"D:\partizione alessandro\programmi+\tentativo parte1\build\assets\frame9")
+        self.ASSETS_PATH = Path(__file__).resolve().parent.parent / "assets" / "frame9"
 
         self.canvas = Canvas(
             self,
@@ -189,21 +189,49 @@ class New_Features(Frame):
         )
         self.texts_list.append(self.name_rev)
 
-        self.text_info= self.canvas.create_text(
+        self.text_info = self.canvas.create_text(
             430.0,
-            434.0,
+            418.0,
             anchor="nw",
-            text="Infos",
+            text="PATCH HIGHLIGHTS & RELEASE NOTES",
             fill="#FDF500",
-            font=("RussoOne Regular", 20 * -1)
+            font=("Arial", 11, "bold")
         )
         self.texts_list.append(self.text_info)
+
+        features = [
+            ("⚡ CYBER DICE & TERMINAL HACK", "Playable in-app casino game with animated dice roll physics, terminal hack, and multi-tier chip betting."),
+            ("💰 VIRTUAL ECONOMY ENGINE", "Persistent credit wallets, VIP status multipliers, daily syndicate allowance (+250 / +500 CR), and audit logs."),
+            ("🛠️ MODULAR MODDING MATRIX", "Live sandbox manager supporting real-time toggling of post-processing shaders, audio decks, and tools."),
+            ("🎫 SYNDICATE SUPPORT MATRIX", "Restored back navigation, automated ticket dispatching (LP-XXXXX), and local diagnostic buffers."),
+            ("🔒 OFFLINE RESILIENCE & PILLOW AVATARS", "High-DPI alpha-mask rounded corners, SHA-256 session encryption, and seamless MySQL offline fallback.")
+        ]
+        start_y = 445.0
+        for i, (title, desc) in enumerate(features):
+            y = start_y + i * 44.0
+            t_head = self.canvas.create_text(
+                435.0, y,
+                anchor="nw",
+                text=title,
+                fill="#FDF500",
+                font=("Arial", 9, "bold")
+            )
+            self.texts_list.append(t_head)
+
+            t_desc = self.canvas.create_text(
+                435.0, y + 16.0,
+                anchor="nw",
+                text=desc,
+                fill="#bdc3c7",
+                font=("Arial", 8)
+            )
+            self.texts_list.append(t_desc)
 
         self.vlib_patch= self.canvas.create_text(
             955.0,
             175.0,
             anchor="nw",
-            text="0.0.0.1",
+            text="1.0.0",
             fill="#FDF500",
             font=("RussoOne Regular", 20 * -1)
         )
@@ -213,7 +241,7 @@ class New_Features(Frame):
             984.0,
             236.0,
             anchor="nw",
-            text="0.0.0.0",
+            text="1.0.0",
             fill="#FDF500",
             font=("RussoOne Regular", 20 * -1)
         )
@@ -223,7 +251,7 @@ class New_Features(Frame):
             955.0,
             297.0,
             anchor="nw",
-            text="date",
+            text="2023-12-16",
             fill="#FDF500",
             font=("RussoOne Regular", 20 * -1)
         )
