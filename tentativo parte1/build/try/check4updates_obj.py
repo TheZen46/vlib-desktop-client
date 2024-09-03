@@ -1,4 +1,3 @@
-# [2024-DEV Stage 1/2]: refactor(updates): update check4updates_obj.py with current patch versions
 from pathlib import Path
 from tkinter import Pack, Frame, Tk, Canvas, Entry, Text, Button, PhotoImage
 
