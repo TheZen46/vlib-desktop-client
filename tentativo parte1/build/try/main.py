@@ -1,4 +1,4 @@
-# [2024-DEV Stage 6/8]: refactor(app): enhance Application router with dynamic view registration in main.py
+# [2024-DEV Stage 7/8]: refactor(app): register game_session and start_game routes in Application
 from pathlib import Path
 from tkinter import Frame, Tk, Canvas, Entry, Text, Button, PhotoImage, Toplevel, StringVar, Label
 from main_channel_obj import Main_Channel
