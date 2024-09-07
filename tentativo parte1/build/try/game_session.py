@@ -17,3 +17,23 @@ try:
         ACCENT_PURPLE as CYBER_ACCENT,
         play_cyber_sound
     )
+except ImportError:
+    DARK_SLATE = "#272932"
+    NEON_YELLOW = "#FDF500"
+    CYBER_PURPLE = "#200628"
+    CYBER_ACCENT = "#9370DB"
+    def play_cyber_sound(snd, enabled=True): pass
+
+FONT_DISPLAY = "RussoOne Regular"
+FONT_MONO = "ShareTechMono Regular"
+
+
+class GameSession(Frame):
+    def __init__(self, parent, controller, OUTPUT_PATH):
+        super().__init__(parent, bg=DARK_SLATE)
+        self.controller = controller
+        self.OUTPUT_PATH = OUTPUT_PATH
+
+        self.canvas = Canvas(
+            self,
+            bg=DARK_SLATE,
