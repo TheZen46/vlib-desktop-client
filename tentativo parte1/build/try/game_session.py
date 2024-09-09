@@ -37,3 +37,23 @@ class GameSession(Frame):
         self.canvas = Canvas(
             self,
             bg=DARK_SLATE,
+            height=767,
+            width=1253,
+            bd=0,
+            highlightthickness=0,
+            relief="ridge"
+        )
+        self.canvas.place(x=0, y=0)
+
+        self.current_wager = 50
+        self.game_running = False
+        self.mode = "dice"  # "dice" or "hack"
+        self.selected_node = "NODE-ALPHA"
+
+        self.buttons_list = []
+        self.texts_list = []
+        self.dynamic_items = []
+
+    def create_stuff(self):
+        self.canvas.delete("all")
+        self.buttons_list.clear()
