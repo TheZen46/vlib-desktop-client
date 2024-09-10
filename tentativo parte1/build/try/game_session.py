@@ -57,3 +57,22 @@ class GameSession(Frame):
     def create_stuff(self):
         self.canvas.delete("all")
         self.buttons_list.clear()
+        self.texts_list.clear()
+        self.dynamic_items.clear()
+
+        # Outer Neon Border
+        self.canvas.create_rectangle(
+            40, 40, 1213, 727,
+            outline=CYBER_ACCENT, width=2
+        )
+
+        # Header Title
+        title_text = "LAS PURGAS // NEURAL CYBER-DICE" if self.mode == "dice" else "LAS PURGAS // NEURAL TERMINAL BREACH"
+        self.title_id = self.canvas.create_text(
+            626, 75,
+            text=title_text,
+            fill=NEON_YELLOW,
+            font=(FONT_MONO, 26, "bold"),
+            anchor="center"
+        )
+        self.texts_list.append(self.title_id)
