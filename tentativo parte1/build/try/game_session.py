@@ -76,3 +76,23 @@ class GameSession(Frame):
             anchor="center"
         )
         self.texts_list.append(self.title_id)
+
+        subtitle_text = "VIRTUAL PROBABILITY ENGINE" if self.mode == "dice" else "CORP MAINFRAME INTRUSION SANDBOX"
+        sub = self.canvas.create_text(
+            626, 108,
+            text=f"{subtitle_text} // NO REAL CURRENCY",
+            fill=CYBER_ACCENT,
+            font=(FONT_MONO, 11),
+            anchor="center"
+        )
+        self.texts_list.append(sub)
+
+        # Mode Switch Button (Top Right)
+        mode_btn_text = "MODE: [TERMINAL HACK]" if self.mode == "dice" else "MODE: [CYBER-DICE]"
+        self.mode_toggle_btn = Button(
+            self,
+            text=mode_btn_text,
+            font=(FONT_DISPLAY, 10, "bold"),
+            bg=CYBER_PURPLE,
+            fg="#00F0FF",
+            activebackground=CYBER_ACCENT,
