@@ -96,3 +96,23 @@ class GameSession(Frame):
             bg=CYBER_PURPLE,
             fg="#00F0FF",
             activebackground=CYBER_ACCENT,
+            activeforeground="#FFFFFF",
+            relief="ridge",
+            bd=1,
+            cursor="hand2",
+            command=self.toggle_mode
+        )
+        self.mode_toggle_btn.place(x=970, y=60, width=210, height=36)
+        self.buttons_list.append(self.mode_toggle_btn)
+
+        # Player Info Panel
+        self.balance_text = self.canvas.create_text(
+            100, 165,
+            text=f"BALANCE: {self.controller.get_credits()}",
+            fill=NEON_YELLOW,
+            font=(FONT_DISPLAY, 15),
+            anchor="w"
+        )
+        self.texts_list.append(self.balance_text)
+
+        self.wager_text = self.canvas.create_text(
