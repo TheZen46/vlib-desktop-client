@@ -116,3 +116,22 @@ class GameSession(Frame):
         self.texts_list.append(self.balance_text)
 
         self.wager_text = self.canvas.create_text(
+            100, 200,
+            text=f"ACTIVE WAGER: {self.current_wager} CR",
+            fill="#FFFFFF",
+            font=(FONT_DISPLAY, 13),
+            anchor="w"
+        )
+        self.texts_list.append(self.wager_text)
+
+        # Wager Selection Buttons
+        wagers = [25, 50, 100, 250, 500]
+        for i, val in enumerate(wagers):
+            btn = Button(
+                self,
+                text=f"{val} CR",
+                font=(FONT_DISPLAY, 10),
+                bg=CYBER_PURPLE,
+                fg=NEON_YELLOW,
+                activebackground=CYBER_ACCENT,
+                activeforeground="#FFFFFF",
