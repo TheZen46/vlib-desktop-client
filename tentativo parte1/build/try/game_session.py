@@ -135,3 +135,23 @@ class GameSession(Frame):
                 fg=NEON_YELLOW,
                 activebackground=CYBER_ACCENT,
                 activeforeground="#FFFFFF",
+                bd=1,
+                relief="flat",
+                command=lambda v=val: self.set_wager(v)
+            )
+            btn.place(x=100 + i * 80, y=225, width=70, height=32)
+            self.buttons_list.append(btn)
+
+        # Navigation Buttons (Bottom)
+        back_btn = Button(
+            self,
+            text="<< EXIT TO HUB",
+            font=(FONT_DISPLAY, 11),
+            bg=CYBER_PURPLE,
+            fg=NEON_YELLOW,
+            activebackground=CYBER_ACCENT,
+            bd=1,
+            relief="flat",
+            cursor="hand2",
+            command=lambda: self.controller.show_page("main_channel")
+        )
