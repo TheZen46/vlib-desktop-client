@@ -155,3 +155,23 @@ class GameSession(Frame):
             cursor="hand2",
             command=lambda: self.controller.show_page("main_channel")
         )
+        back_btn.place(x=80, y=665, width=160, height=38)
+        self.buttons_list.append(back_btn)
+
+        rules_btn = Button(
+            self,
+            text="PAYOUT RULES",
+            font=(FONT_DISPLAY, 11),
+            bg=CYBER_PURPLE,
+            fg=CYBER_ACCENT,
+            activebackground=CYBER_ACCENT,
+            activeforeground="#FFFFFF",
+            bd=1,
+            relief="flat",
+            cursor="hand2",
+            command=self.show_payout_rules
+        )
+        rules_btn.place(x=1010, y=665, width=160, height=38)
+        self.buttons_list.append(rules_btn)
+
+        # Render specific mode UI
