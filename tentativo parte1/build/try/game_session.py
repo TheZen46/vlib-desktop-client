@@ -175,3 +175,23 @@ class GameSession(Frame):
         self.buttons_list.append(rules_btn)
 
         # Render specific mode UI
+        if self.mode == "dice":
+            self._render_dice_mode()
+        else:
+            self._render_hack_mode()
+
+    def toggle_mode(self):
+        if self.game_running:
+            return
+        self.mode = "hack" if self.mode == "dice" else "dice"
+        self.create_stuff()
+
+    def set_wager(self, amount: int):
+        self.current_wager = amount
+        self.canvas.itemconfig(self.wager_text, text=f"ACTIVE WAGER: {self.current_wager} CR")
+
+    # ==========================================
+    # MODE 1: CYBER-DICE
+    # ==========================================
+    def _render_dice_mode(self):
+        self.dice1_rect = self.canvas.create_rectangle(
