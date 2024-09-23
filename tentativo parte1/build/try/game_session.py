@@ -195,3 +195,22 @@ class GameSession(Frame):
     # ==========================================
     def _render_dice_mode(self):
         self.dice1_rect = self.canvas.create_rectangle(
+            460, 310, 580, 430,
+            fill=CYBER_PURPLE, outline=NEON_YELLOW, width=2
+        )
+        self.dice2_rect = self.canvas.create_rectangle(
+            670, 310, 790, 430,
+            fill=CYBER_PURPLE, outline=NEON_YELLOW, width=2
+        )
+
+        self.dice1_text = self.canvas.create_text(
+            520, 370,
+            text="?",
+            fill=NEON_YELLOW,
+            font=(FONT_DISPLAY, 40, "bold"),
+            anchor="center"
+        )
+        self.texts_list.append(self.dice1_text)
+
+        self.dice2_text = self.canvas.create_text(
+            730, 370,
