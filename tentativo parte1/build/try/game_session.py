@@ -214,3 +214,23 @@ class GameSession(Frame):
 
         self.dice2_text = self.canvas.create_text(
             730, 370,
+            text="?",
+            fill=NEON_YELLOW,
+            font=(FONT_DISPLAY, 40, "bold"),
+            anchor="center"
+        )
+        self.texts_list.append(self.dice2_text)
+
+        self.action_btn = Button(
+            self,
+            text="ROLL CYBER-DICE",
+            font=(FONT_DISPLAY, 15, "bold"),
+            bg="#9370DB",
+            fg="#FFFFFF",
+            activebackground=NEON_YELLOW,
+            activeforeground=CYBER_PURPLE,
+            bd=0,
+            relief="flat",
+            cursor="hand2",
+            command=self.roll_dice
+        )
