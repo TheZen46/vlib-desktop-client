@@ -234,3 +234,23 @@ class GameSession(Frame):
             cursor="hand2",
             command=self.roll_dice
         )
+        self.action_btn.place(x=485, y=475, width=280, height=48)
+        self.buttons_list.append(self.action_btn)
+
+        self.result_text = self.canvas.create_text(
+            626, 565,
+            text="SELECT WAGER AND ROLL TO BEGIN",
+            fill="#FFFFFF",
+            font=(FONT_MONO, 13),
+            anchor="center"
+        )
+        self.texts_list.append(self.result_text)
+
+    def roll_dice(self):
+        if self.game_running:
+            return
+
+        if not self.controller.spend_credits(self.current_wager):
+            messagebox.showwarning(
+                "Insufficient Balance",
+                f"You need at least {self.current_wager} CR to roll!\nHead over to the recharge station."
