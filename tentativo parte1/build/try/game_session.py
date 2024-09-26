@@ -254,3 +254,22 @@ class GameSession(Frame):
             messagebox.showwarning(
                 "Insufficient Balance",
                 f"You need at least {self.current_wager} CR to roll!\nHead over to the recharge station."
+            )
+            self.controller.show_page("notenoughmoney")
+            return
+
+        self.game_running = True
+        self.action_btn.config(state="disabled")
+        play_cyber_sound("roll", enabled=self.controller.is_sound_enabled())
+        self.canvas.itemconfig(self.balance_text, text=f"BALANCE: {self.controller.get_credits()}")
+        self.canvas.itemconfig(self.result_text, text="ROLLING CYBER-DICE...", fill=CYBER_ACCENT)
+
+        self._roll_animation(step=0)
+
+    def _roll_animation(self, step: int):
+        if step < 8:
+            d1 = random.randint(1, 6)
+            d2 = random.randint(1, 6)
+            self.canvas.itemconfig(self.dice1_text, text=str(d1))
+            self.canvas.itemconfig(self.dice2_text, text=str(d2))
+            self.after(50, lambda: self._roll_animation(step + 1))
