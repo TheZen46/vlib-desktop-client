@@ -273,3 +273,23 @@ class GameSession(Frame):
             self.canvas.itemconfig(self.dice1_text, text=str(d1))
             self.canvas.itemconfig(self.dice2_text, text=str(d2))
             self.after(50, lambda: self._roll_animation(step + 1))
+        else:
+            self._finalize_roll()
+
+    def _finalize_roll(self):
+        d1 = random.randint(1, 6)
+        d2 = random.randint(1, 6)
+        total = d1 + d2
+
+        self.canvas.itemconfig(self.dice1_text, text=str(d1))
+        self.canvas.itemconfig(self.dice2_text, text=str(d2))
+
+        if d1 == d2:
+            won = int(self.current_wager * 3.0)
+            self.controller.add_credits(won)
+            msg = f"CRITICAL DOUBLE! Rolled ({d1}, {d2}) -> WON {won} CR (3x Payout)!"
+            color = NEON_YELLOW
+            play_cyber_sound("win", enabled=self.controller.is_sound_enabled())
+        elif total in [7, 11]:
+            won = int(self.current_wager * 2.0)
+            self.controller.add_credits(won)
