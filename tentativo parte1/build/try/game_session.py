@@ -293,3 +293,23 @@ class GameSession(Frame):
         elif total in [7, 11]:
             won = int(self.current_wager * 2.0)
             self.controller.add_credits(won)
+            msg = f"LUCKY STRIKE! Rolled {total} -> WON {won} CR (2x Payout)!"
+            color = "#00FF7F"
+            play_cyber_sound("win", enabled=self.controller.is_sound_enabled())
+        elif total >= 8:
+            won = int(self.current_wager * 1.5)
+            self.controller.add_credits(won)
+            msg = f"NODE BREACHED! Rolled {total} -> WON {won} CR (1.5x Payout)!"
+            color = "#00E5FF"
+            play_cyber_sound("win", enabled=self.controller.is_sound_enabled())
+        else:
+            msg = f"SIGNAL LOST! Rolled {total} -> Lost {self.current_wager} CR. Roll again!"
+            color = "#FF4444"
+
+        self.canvas.itemconfig(self.result_text, text=msg, fill=color)
+        self.canvas.itemconfig(self.balance_text, text=f"BALANCE: {self.controller.get_credits()}")
+
+        self.game_running = False
+        self.action_btn.config(state="normal")
+
+    # ==========================================
