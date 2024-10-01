@@ -313,3 +313,23 @@ class GameSession(Frame):
         self.action_btn.config(state="normal")
 
     # ==========================================
+    # MODE 2: NEURAL TERMINAL HACK
+    # ==========================================
+    def _render_hack_mode(self):
+        nodes = [
+            ("NODE-ALPHA", "PORT 22 // SEC-LVL 1", 330),
+            ("NODE-BETA", "PORT 443 // SEC-LVL 2", 550),
+            ("NODE-GAMMA", "PORT 8080 // SEC-LVL 3", 770)
+        ]
+
+        self.node_buttons = []
+        for name, port, x in nodes:
+            is_active = (self.selected_node == name)
+            bg = "#9370DB" if is_active else CYBER_PURPLE
+            fg = "#FFFFFF" if is_active else NEON_YELLOW
+            btn = Button(
+                self,
+                text=f"{name}\n{port}",
+                font=(FONT_DISPLAY, 10, "bold"),
+                bg=bg,
+                fg=fg,
