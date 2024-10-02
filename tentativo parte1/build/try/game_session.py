@@ -333,3 +333,22 @@ class GameSession(Frame):
                 font=(FONT_DISPLAY, 10, "bold"),
                 bg=bg,
                 fg=fg,
+                activebackground=CYBER_ACCENT,
+                bd=2,
+                relief="ridge" if is_active else "flat",
+                cursor="hand2",
+                command=lambda n=name: self.select_hack_node(n)
+            )
+            btn.place(x=x, y=320, width=170, height=80)
+            self.buttons_list.append(btn)
+            self.node_buttons.append((name, btn))
+
+        self.action_btn = Button(
+            self,
+            text=f"EXECUTE BREACH ON {self.selected_node}",
+            font=(FONT_DISPLAY, 14, "bold"),
+            bg="#00F0FF",
+            fg=CYBER_PURPLE,
+            activebackground=NEON_YELLOW,
+            activeforeground=CYBER_PURPLE,
+            bd=0,
