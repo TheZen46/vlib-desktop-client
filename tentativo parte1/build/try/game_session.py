@@ -352,3 +352,23 @@ class GameSession(Frame):
             activebackground=NEON_YELLOW,
             activeforeground=CYBER_PURPLE,
             bd=0,
+            relief="flat",
+            cursor="hand2",
+            command=self.execute_hack
+        )
+        self.action_btn.place(x=440, y=450, width=370, height=48)
+        self.buttons_list.append(self.action_btn)
+
+        self.result_text = self.canvas.create_text(
+            626, 550,
+            text="SELECT TARGET NODE AND EXECUTE INTRUSION",
+            fill="#FFFFFF",
+            font=(FONT_MONO, 13),
+            anchor="center"
+        )
+        self.texts_list.append(self.result_text)
+
+    def select_hack_node(self, node_name: str):
+        if self.game_running:
+            return
+        self.selected_node = node_name
