@@ -372,3 +372,23 @@ class GameSession(Frame):
         if self.game_running:
             return
         self.selected_node = node_name
+        for name, btn in self.node_buttons:
+            if name == node_name:
+                btn.config(bg="#9370DB", fg="#FFFFFF", relief="ridge")
+            else:
+                btn.config(bg=CYBER_PURPLE, fg=NEON_YELLOW, relief="flat")
+        self.action_btn.config(text=f"EXECUTE BREACH ON {self.selected_node}")
+
+    def execute_hack(self):
+        if self.game_running:
+            return
+
+        if not self.controller.spend_credits(self.current_wager):
+            messagebox.showwarning(
+                "Insufficient Balance",
+                f"You need at least {self.current_wager} CR to hack this terminal!\nRecharge your credits first."
+            )
+            self.controller.show_page("notenoughmoney")
+            return
+
+        self.game_running = True
