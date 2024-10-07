@@ -392,3 +392,22 @@ class GameSession(Frame):
             return
 
         self.game_running = True
+        self.action_btn.config(state="disabled")
+        play_cyber_sound("hack", enabled=self.controller.is_sound_enabled())
+        self.canvas.itemconfig(self.balance_text, text=f"BALANCE: {self.controller.get_credits()}")
+
+        self._hack_animation(step=0)
+
+    def _hack_animation(self, step: int):
+        hex_chars = "0123456789ABCDEF"
+        if step < 10:
+            random_trace = "".join(random.choice(hex_chars) for _ in range(16))
+            pct = (step + 1) * 10
+            self.canvas.itemconfig(
+                self.result_text,
+                text=f"BYPASSING FIREWALL... [{random_trace}] {pct}%",
+                fill="#00F0FF"
+            )
+            self.after(60, lambda: self._hack_animation(step + 1))
+        else:
+            self._finalize_hack()
