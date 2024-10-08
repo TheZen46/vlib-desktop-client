@@ -411,3 +411,23 @@ class GameSession(Frame):
             self.after(60, lambda: self._hack_animation(step + 1))
         else:
             self._finalize_hack()
+
+    def _finalize_hack(self):
+        # 3 outcomes:
+        # 1. Core Vault (4x jackpot) - 30%
+        # 2. Data Cache (2x extract) - 35%
+        # 3. ICE Firewall Trap (loss) - 35%
+        roll = random.random()
+        if roll < 0.30:
+            multiplier = 4.0
+            won = int(self.current_wager * multiplier)
+            self.controller.add_credits(won)
+            msg = f"CORE VAULT UNLOCKED! {self.selected_node} BREACHED -> WON {won} CR (4x JACKPOT)!"
+            color = NEON_YELLOW
+            play_cyber_sound("win", enabled=self.controller.is_sound_enabled())
+        elif roll < 0.65:
+            multiplier = 2.0
+            won = int(self.current_wager * multiplier)
+            self.controller.add_credits(won)
+            msg = f"DATA EXTRACTION SUCCESS! {self.selected_node} -> WON {won} CR (2x PAYOUT)!"
+            color = "#00FF7F"
