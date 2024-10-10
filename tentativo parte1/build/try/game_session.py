@@ -431,3 +431,23 @@ class GameSession(Frame):
             self.controller.add_credits(won)
             msg = f"DATA EXTRACTION SUCCESS! {self.selected_node} -> WON {won} CR (2x PAYOUT)!"
             color = "#00FF7F"
+            play_cyber_sound("win", enabled=self.controller.is_sound_enabled())
+        else:
+            msg = f"INTRUSION DETECTED! ICE Firewall locked {self.selected_node} -> Lost {self.current_wager} CR."
+            color = "#FF4444"
+
+        self.canvas.itemconfig(self.result_text, text=msg, fill=color)
+        self.canvas.itemconfig(self.balance_text, text=f"BALANCE: {self.controller.get_credits()}")
+
+        self.game_running = False
+        self.action_btn.config(state="normal")
+
+    def show_payout_rules(self):
+        if self.mode == "dice":
+            msg = (
+                "NEURAL CYBER-DICE RULES:\n\n"
+                "- CRITICAL DOUBLES (e.g. 6-6, 4-4): 3.0x Payout\n"
+                "- LUCKY STRIKE (Total 7 or 11): 2.0x Payout\n"
+                "- HIGH NODE (Total 8, 9, 10, 12): 1.5x Payout\n"
+                "- LOW FREQUENCY (Total 2, 3, 4, 5, 6): Lost Wager\n\n"
+                "Virtual chips only. Play responsibly in Las Purgas!"
