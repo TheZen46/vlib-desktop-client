@@ -451,3 +451,23 @@ class GameSession(Frame):
                 "- HIGH NODE (Total 8, 9, 10, 12): 1.5x Payout\n"
                 "- LOW FREQUENCY (Total 2, 3, 4, 5, 6): Lost Wager\n\n"
                 "Virtual chips only. Play responsibly in Las Purgas!"
+            )
+        else:
+            msg = (
+                "NEURAL TERMINAL HACK RULES:\n\n"
+                "- Select your target entry node (Alpha, Beta, Gamma).\n"
+                "- CORE VAULT (30% probability): 4.0x JACKPOT\n"
+                "- DATA CACHE (35% probability): 2.0x Extraction Payout\n"
+                "- ICE FIREWALL (35% probability): Intrusion blocked (Lost Wager)\n\n"
+                "Corporate subroutines randomize after every intrusion attempt."
+            )
+        messagebox.showinfo("Las Purgas // Payout Matrix", msg)
+
+    def destroy_stuff(self):
+        for btn in self.buttons_list:
+            btn.destroy()
+        self.buttons_list.clear()
+
+        for t in self.texts_list:
+            self.canvas.delete(t)
+        self.texts_list.clear()
