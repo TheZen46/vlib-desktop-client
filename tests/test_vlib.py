@@ -34,3 +34,21 @@ class TestVLibAssetsAndPaths(unittest.TestCase):
             frame_dir = assets_dir / f"frame{frame_idx}"
             self.assertTrue(frame_dir.exists(), f"Frame {frame_idx} directory must exist")
             self.assertGreater(len(list(frame_dir.iterdir())), 0, f"Frame {frame_idx} should contain images")
+
+    def test_icon_and_audio_exist(self):
+        ico = REPO_ROOT / "tentativo parte1" / "las_purgas.ico"
+        audio = REPO_ROOT / "tentativo parte1" / "elevator_wait.mp3"
+        self.assertTrue(ico.exists(), "las_purgas.ico must exist")
+        self.assertTrue(audio.exists(), "elevator_wait.mp3 must exist")
+
+
+class TestVLibSineWaveMath(unittest.TestCase):
+    def test_harmonic_sine_wave_bounds(self):
+        amplitude = 15
+        frequency = 3.2
+        num_spheres = 6
+        center_y = 25
+
+        for t in [0.0, 0.5, 1.0, 2.5, 5.0]:
+            for i in range(num_spheres):
+                y = center_y + amplitude * math.sin(frequency * (2 * math.pi * (i / num_spheres) - frequency * t))
