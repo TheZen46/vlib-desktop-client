@@ -52,3 +52,22 @@ class TestVLibSineWaveMath(unittest.TestCase):
         for t in [0.0, 0.5, 1.0, 2.5, 5.0]:
             for i in range(num_spheres):
                 y = center_y + amplitude * math.sin(frequency * (2 * math.pi * (i / num_spheres) - frequency * t))
+                self.assertGreaterEqual(y, center_y - amplitude - 1e-9)
+                self.assertLessEqual(y, center_y + amplitude + 1e-9)
+
+
+class TestVLibAuthentication(unittest.TestCase):
+    def test_offline_demo_authentication(self):
+        client = Mycon_basdata(username="thezen46", password="S/um17")
+        self.assertTrue(client.find_and_verify(), "Default demo user thezen46 should verify")
+
+    def test_secondary_demo_user(self):
+        client = Mycon_basdata(username="Poldo", password="C4L4br3$")
+        self.assertTrue(client.find_and_verify(), "Demo user Poldo should verify")
+
+    def test_invalid_password_rejected(self):
+        client = Mycon_basdata(username="thezen46", password="wrong_password_999")
+        self.assertFalse(client.find_and_verify(), "Invalid password must be rejected")
+
+    def test_default_image_fallback(self):
+        client = Mycon_basdata(username="thezen46")
