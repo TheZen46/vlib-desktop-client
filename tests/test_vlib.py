@@ -71,3 +71,21 @@ class TestVLibAuthentication(unittest.TestCase):
 
     def test_default_image_fallback(self):
         client = Mycon_basdata(username="thezen46")
+        img = client.get_imagepath()
+        self.assertIn("png", img, "Image path should return a valid png identifier")
+
+    def test_forced_offline_mode(self):
+        os.environ["VLIB_FORCE_OFFLINE"] = "1"
+        try:
+            client = Mycon_basdata(username="thezen46", password="S/um17")
+            self.assertTrue(client.is_offline, "Client must be offline when VLIB_FORCE_OFFLINE is set")
+            self.assertTrue(client.find_and_verify(), "Demo user should verify in forced offline mode")
+        finally:
+            os.environ.pop("VLIB_FORCE_OFFLINE", None)
+
+
+class TestVLibEconomyAndProfile(unittest.TestCase):
+    def setUp(self):
+        self.pm = ProfileManager()
+
+    def test_initial_credits_and_rank(self):
