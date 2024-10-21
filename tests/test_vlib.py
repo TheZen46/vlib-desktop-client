@@ -89,3 +89,21 @@ class TestVLibEconomyAndProfile(unittest.TestCase):
         self.pm = ProfileManager()
 
     def test_initial_credits_and_rank(self):
+        self.assertGreater(self.pm.get_credits(), 0)
+        self.assertIn("CR", self.pm.get_formatted_credits())
+
+    def test_credit_addition_and_spending(self):
+        initial = self.pm.get_credits()
+        self.pm.add_credits(500)
+        self.assertEqual(self.pm.get_credits(), initial + 500)
+
+        spent = self.pm.spend_credits(250)
+        self.assertTrue(spent)
+        self.assertEqual(self.pm.get_credits(), initial + 250)
+
+    def test_insufficient_credit_rejection(self):
+        large_amount = self.pm.get_credits() + 999999
+        self.assertFalse(self.pm.spend_credits(large_amount))
+
+    def test_vip_activation(self):
+        self.pm.set_vip(True)
