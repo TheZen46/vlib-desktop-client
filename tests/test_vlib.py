@@ -107,3 +107,21 @@ class TestVLibEconomyAndProfile(unittest.TestCase):
 
     def test_vip_activation(self):
         self.pm.set_vip(True)
+        self.assertTrue(self.pm.is_vip())
+        self.assertIn("VIP", self.pm.get_rank())
+
+    def test_daily_allowance_claim_and_cooldown(self):
+        self.pm.data["last_daily_claim"] = 0
+        initial_cr = self.pm.get_credits()
+        success, reward, new_cr, msg = self.pm.claim_daily_allowance()
+        self.assertTrue(success)
+        self.assertGreater(reward, 0)
+        self.assertEqual(new_cr, initial_cr + reward)
+
+        success_retry, reward_retry, current_cr, msg_retry = self.pm.claim_daily_allowance()
+        self.assertFalse(success_retry)
+        self.assertEqual(reward_retry, 0)
+        self.assertIn("cooldown", msg_retry.lower())
+
+    def test_mod_management_toggling_and_catalog(self):
+        catalog = self.pm.get_available_mods()
