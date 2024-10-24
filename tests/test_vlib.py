@@ -125,3 +125,22 @@ class TestVLibEconomyAndProfile(unittest.TestCase):
 
     def test_mod_management_toggling_and_catalog(self):
         catalog = self.pm.get_available_mods()
+        self.assertGreaterEqual(len(catalog), 4)
+        first_mod = catalog[0]["id"]
+
+        if not self.pm.is_mod_active(first_mod):
+            self.pm.toggle_mod(first_mod)
+        self.assertTrue(self.pm.is_mod_active(first_mod))
+
+        new_state = self.pm.toggle_mod(first_mod)
+        self.assertFalse(new_state)
+        self.assertFalse(self.pm.is_mod_active(first_mod))
+
+        restored = self.pm.toggle_mod(first_mod)
+        self.assertTrue(restored)
+        self.assertTrue(self.pm.is_mod_active(first_mod))
+
+    def test_support_ticket_logging_and_persistence(self):
+        ticket = self.pm.submit_support_ticket(
+            username="test_operative",
+            category="Bug Report",
