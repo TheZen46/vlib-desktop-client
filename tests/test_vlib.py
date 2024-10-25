@@ -144,3 +144,21 @@ class TestVLibEconomyAndProfile(unittest.TestCase):
         ticket = self.pm.submit_support_ticket(
             username="test_operative",
             category="Bug Report",
+            message="Test error logging verification"
+        )
+        self.assertTrue(ticket["ticket_id"].startswith("LP-"))
+        self.assertEqual(ticket["status"], "OPEN")
+        self.assertEqual(ticket["category"], "Bug Report")
+        self.assertTrue(self.pm.tickets_file.exists())
+
+    def test_sound_toggle_and_state(self):
+        self.assertTrue(self.pm.is_sound_enabled())
+        toggled = self.pm.toggle_sound()
+        self.assertFalse(toggled)
+        self.assertFalse(self.pm.is_sound_enabled())
+        restored = self.pm.toggle_sound()
+        self.assertTrue(restored)
+        self.assertTrue(self.pm.is_sound_enabled())
+
+
+class TestVLibSecurityAndValidation(unittest.TestCase):
