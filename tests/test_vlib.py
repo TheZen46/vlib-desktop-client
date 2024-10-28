@@ -162,3 +162,21 @@ class TestVLibEconomyAndProfile(unittest.TestCase):
 
 
 class TestVLibSecurityAndValidation(unittest.TestCase):
+    def test_password_complexity_rules(self):
+        uppercase_regex = r'[A-Z]'
+        lowercase_regex = r'[a-z]'
+        special_chars_regex = r'[^A-Za-z0-9]'
+        numbers_regex = r'\d'
+
+        strong_pass = "P@ssw0rd2024!"
+        self.assertTrue(re.search(uppercase_regex, strong_pass))
+        self.assertTrue(re.search(lowercase_regex, strong_pass))
+        self.assertTrue(re.search(numbers_regex, strong_pass))
+        self.assertTrue(re.search(special_chars_regex, strong_pass))
+
+        weak_pass = "password"
+        is_strong = bool(
+            re.search(uppercase_regex, weak_pass) and
+            re.search(lowercase_regex, weak_pass) and
+            re.search(numbers_regex, weak_pass) and
+            re.search(special_chars_regex, weak_pass)
