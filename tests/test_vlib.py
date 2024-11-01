@@ -180,3 +180,21 @@ class TestVLibSecurityAndValidation(unittest.TestCase):
             re.search(lowercase_regex, weak_pass) and
             re.search(numbers_regex, weak_pass) and
             re.search(special_chars_regex, weak_pass)
+        )
+        self.assertFalse(is_strong, "Weak password lacking uppercase/special/numbers should fail")
+
+    def test_birth_year_validation(self):
+        current_year = datetime.now().year
+        birth_year_valid = current_year - 25
+        age_valid = current_year - birth_year_valid
+        self.assertTrue(14 <= age_valid < 93)
+
+        birth_year_young = current_year - 10
+        age_young = current_year - birth_year_young
+        self.assertFalse(14 <= age_young < 93)
+
+
+class TestVLibNativeImageProcessing(unittest.TestCase):
+    def test_native_pillow_round_corner(self):
+        test_img = Image.new("RGB", (64, 64), color=(100, 150, 200))
+        from PIL import ImageDraw
