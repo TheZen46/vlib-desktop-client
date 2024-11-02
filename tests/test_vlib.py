@@ -198,3 +198,22 @@ class TestVLibNativeImageProcessing(unittest.TestCase):
     def test_native_pillow_round_corner(self):
         test_img = Image.new("RGB", (64, 64), color=(100, 150, 200))
         from PIL import ImageDraw
+        width, height = test_img.size
+        mask = Image.new("L", (width, height), 0)
+        draw = ImageDraw.Draw(mask)
+        draw.rounded_rectangle((0, 0, width, height), radius=10, fill=255)
+        
+        rgba_img = test_img.convert("RGBA")
+        rgba_img.putalpha(mask)
+        self.assertEqual(rgba_img.mode, "RGBA")
+        self.assertEqual(rgba_img.size, (64, 64))
+        self.assertEqual(rgba_img.getpixel((0, 0))[3], 0)
+        self.assertEqual(rgba_img.getpixel((32, 32))[3], 255)
+
+
+class TestVLibApplicationStateAndRouting(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.patcher_info = patch("tkinter.messagebox.showinfo", return_value="ok")
+        cls.patcher_warn = patch("tkinter.messagebox.showwarning", return_value="ok")
+        cls.patcher_info.start()
