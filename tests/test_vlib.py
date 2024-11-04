@@ -217,3 +217,21 @@ class TestVLibApplicationStateAndRouting(unittest.TestCase):
         cls.patcher_info = patch("tkinter.messagebox.showinfo", return_value="ok")
         cls.patcher_warn = patch("tkinter.messagebox.showwarning", return_value="ok")
         cls.patcher_info.start()
+        cls.patcher_warn.start()
+
+        cls.app = Application(OUTPUT_PATH=OUTPUT_PATH)
+        cls.app.withdraw()  # Hide window during tests
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.app.destroy()
+        cls.patcher_info.stop()
+        cls.patcher_warn.stop()
+
+    def test_registered_pages(self):
+        self.assertGreaterEqual(len(self.app.pages), 22, "Application should register at least 22 page views")
+        self.assertIn("sign_in", self.app.pages)
+        self.assertIn("main_channel", self.app.pages)
+        self.assertIn("options", self.app.pages)
+        self.assertIn("notenoughmoney", self.app.pages)
+        self.assertIn("game_session", self.app.pages)
