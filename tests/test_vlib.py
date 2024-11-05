@@ -235,3 +235,21 @@ class TestVLibApplicationStateAndRouting(unittest.TestCase):
         self.assertIn("options", self.app.pages)
         self.assertIn("notenoughmoney", self.app.pages)
         self.assertIn("game_session", self.app.pages)
+
+    def test_temp_tool_state_cycle(self):
+        self.app.temp_tool("modify", "username", "test_user_42")
+        self.app.temp_tool("modify", "email", "test@example.com")
+        
+        self.assertEqual(self.app.temp_tool("return", "username"), "test_user_42")
+        self.assertEqual(self.app.temp_tool("return", "email"), "test@example.com")
+        
+        self.app.temp_tool("reload", None)
+        self.assertEqual(self.app.temp_tool("return", "username"), "")
+        self.assertEqual(self.app.temp_tool("return", "email"), "")
+
+    def test_start_game_mounts_game_session(self):
+        self.app.show_page("start_game")
+        self.assertEqual(self.app.pages["current"], self.app.pages["game_session"])
+
+    def test_contact_us_back_button_and_ticket_dispatch(self):
+        self.app.show_page("contact_us")
