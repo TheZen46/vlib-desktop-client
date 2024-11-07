@@ -253,3 +253,21 @@ class TestVLibApplicationStateAndRouting(unittest.TestCase):
 
     def test_contact_us_back_button_and_ticket_dispatch(self):
         self.app.show_page("contact_us")
+        contact_page = self.app.pages["contact_us"]
+        self.assertTrue(hasattr(contact_page, "button_9"), "Contact Us must have button_9 back button")
+        self.assertTrue(hasattr(contact_page, "dispatch_btn"), "Contact Us must have ticket dispatch button")
+
+    def test_modding_matrix_and_launch(self):
+        self.app.show_page("modding")
+        modding_page = self.app.pages["modding"]
+        self.assertGreaterEqual(len(modding_page.mod_buttons), 4, "Modding view must render 4 mod toggle buttons")
+
+    def test_main_channel_daily_bonus_button(self):
+        self.app.show_page("main_channel")
+        mc = self.app.pages["main_channel"]
+        self.assertTrue(hasattr(mc, "daily_bonus_btn"), "Main Channel must have daily bonus button")
+
+    def test_get_vip_canvas_texts_and_balances(self):
+        self.app.show_page("getVIP")
+        vip_page = self.app.pages["getVIP"]
+        credit_text = vip_page.canvas.itemcget(vip_page.credit, "text")
