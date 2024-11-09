@@ -271,3 +271,22 @@ class TestVLibApplicationStateAndRouting(unittest.TestCase):
         self.app.show_page("getVIP")
         vip_page = self.app.pages["getVIP"]
         credit_text = vip_page.canvas.itemcget(vip_page.credit, "text")
+        date_text = vip_page.canvas.itemcget(vip_page.date, "text")
+        self.assertIn("CR", credit_text, "Credit text should display currency format")
+        self.assertTrue("OPERATIVE" in date_text or "VIP" in date_text, "Date text should display operative membership tier")
+
+    def test_check4updates_version_labels(self):
+        self.app.show_page("check4updates")
+        upd_page = self.app.pages["check4updates"]
+        vlib_ver = upd_page.canvas.itemcget(upd_page.patch_VL, "text")
+        launcher_ver = upd_page.canvas.itemcget(upd_page.patch_La, "text")
+        self.assertEqual(vlib_ver, "1.0.0")
+        self.assertEqual(launcher_ver, "2.1.0")
+
+    def test_options_audio_toggle_button(self):
+        self.app.show_page("options")
+        opt_page = self.app.pages["options"]
+        self.assertTrue(hasattr(opt_page, "audio_toggle_btn"), "Options must have audio toggle button")
+
+    def test_new_features_release_notes(self):
+        self.app.show_page("new_features")
