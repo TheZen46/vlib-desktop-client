@@ -290,3 +290,21 @@ class TestVLibApplicationStateAndRouting(unittest.TestCase):
 
     def test_new_features_release_notes(self):
         self.app.show_page("new_features")
+        nf_page = self.app.pages["new_features"]
+        info_title = nf_page.canvas.itemcget(nf_page.text_info, "text")
+        self.assertIn("HIGHLIGHTS", info_title)
+
+    def test_game_session_dual_mode_toggle_and_node_selection(self):
+        self.app.show_page("game_session")
+        game = self.app.pages["game_session"]
+        self.assertEqual(game.mode, "dice")
+        self.assertTrue(hasattr(game, "mode_toggle_btn"))
+
+        # Switch to hack mode
+        game.toggle_mode()
+        self.assertEqual(game.mode, "hack")
+        self.assertIn("BREACH", game.canvas.itemcget(game.title_id, "text"))
+
+        # Select node
+        game.select_hack_node("NODE-BETA")
+        self.assertEqual(game.selected_node, "NODE-BETA")
