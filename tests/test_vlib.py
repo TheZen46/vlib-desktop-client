@@ -308,3 +308,21 @@ class TestVLibApplicationStateAndRouting(unittest.TestCase):
         # Select node
         game.select_hack_node("NODE-BETA")
         self.assertEqual(game.selected_node, "NODE-BETA")
+
+        # Toggle back to dice
+        game.toggle_mode()
+        self.assertEqual(game.mode, "dice")
+
+    def test_howdoesitworks_profile_badge(self):
+        self.app.change_username("CyberRunner")
+        self.app.show_page("howdoesitwork")
+        h_page = self.app.pages["howdoesitwork"]
+        self.assertTrue(hasattr(h_page, "name_rev"))
+        self.assertEqual(h_page.canvas.itemcget(h_page.name_rev, "text"), "CyberRunner")
+
+    def test_contactus_tryagain_support_matrix(self):
+        self.app.show_page("contactus_tryagain")
+        c_page = self.app.pages["contactus_tryagain"]
+        self.assertGreaterEqual(len(c_page.texts_list), 4)
+
+    def test_tryagain_signup_set_temp_datas(self):
