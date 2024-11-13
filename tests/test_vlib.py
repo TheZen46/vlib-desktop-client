@@ -326,3 +326,21 @@ class TestVLibApplicationStateAndRouting(unittest.TestCase):
         self.assertGreaterEqual(len(c_page.texts_list), 4)
 
     def test_tryagain_signup_set_temp_datas(self):
+        self.app.show_page("tryagain_signup")
+        t_page = self.app.pages["tryagain_signup"]
+        t_page.entry_1.delete(0, "end")
+        t_page.entry_1.insert(0, "neo_operative")
+        t_page.entry_2.delete(0, "end")
+        t_page.entry_2.insert(0, "SecretPass123!")
+        t_page.entry_3.delete(0, "end")
+        t_page.entry_3.insert(0, "neo@zion.net")
+        t_page.entry_4.delete(0, "end")
+        t_page.entry_4.insert(0, "1999")
+        t_page.entry_5.delete(0, "end")
+        t_page.entry_5.insert(0, "11")
+        t_page.entry_6.delete(0, "end")
+        t_page.entry_6.insert(0, "05")
+
+        t_page.set_temp_datas()
+        self.assertEqual(self.app.temp_tool("obt", "user"), "neo_operative")
+        self.assertEqual(self.app.temp_tool("obt", "pass"), "SecretPass123!")
