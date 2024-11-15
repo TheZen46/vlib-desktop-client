@@ -344,3 +344,22 @@ class TestVLibApplicationStateAndRouting(unittest.TestCase):
         t_page.set_temp_datas()
         self.assertEqual(self.app.temp_tool("obt", "user"), "neo_operative")
         self.assertEqual(self.app.temp_tool("obt", "pass"), "SecretPass123!")
+        self.assertEqual(self.app.temp_tool("obt", "mail"), "neo@zion.net")
+        self.assertEqual(self.app.temp_tool("obt", "birth"), "1999-11-05")
+
+    def test_all_24_pages_mount_and_cleanup(self):
+        all_pages = [
+            "main_channel", "new_features", "options", "rules", "howdoesitwork",
+            "contact_us", "sign_in", "sign_up", "tryagain_signup", "description_lang",
+            "contactus_tryagain", "personalizeimage", "termsandconditions", "done",
+            "modding", "getVIP", "check4updates", "modifyaccount", "languagesettings",
+            "roles", "rulz", "forgotthepassword", "notenoughmoney", "game_session"
+        ]
+        for p in all_pages:
+            self.assertIn(p, self.app.pages, f"Page '{p}' must be registered in router")
+            self.app.show_page(p)
+            self.assertEqual(self.app.pages["current"], self.app.pages[p])
+
+
+if __name__ == "__main__":
+    unittest.main()
