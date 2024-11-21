@@ -29,3 +29,13 @@ class TestVLibCommandLineInterface(unittest.TestCase):
         self.assertEqual(res.returncode, 0)
         self.assertIn("System Diagnostics", res.stdout)
         self.assertIn("Tkinter", res.stdout)
+        self.assertIn("Pillow", res.stdout)
+        self.assertIn("ALL CRITICAL SUBSYSTEMS HEALTHY", res.stdout)
+
+    def test_cli_argument_parser_offline(self):
+        sys.argv = ["run_client.py", "--offline"]
+        args = run_client.parse_arguments()
+        self.assertTrue(args.offline)
+
+    def test_cli_argument_parser_user(self):
+        sys.argv = ["run_client.py", "--user", "thezen46"]
