@@ -39,3 +39,13 @@ class TestVLibCommandLineInterface(unittest.TestCase):
 
     def test_cli_argument_parser_user(self):
         sys.argv = ["run_client.py", "--user", "thezen46"]
+        args = run_client.parse_arguments()
+        self.assertEqual(args.user, "thezen46")
+
+    def test_cli_argument_parser_page(self):
+        sys.argv = ["run_client.py", "--page", "game_session"]
+        args = run_client.parse_arguments()
+        self.assertEqual(args.page, "game_session")
+
+    def test_cli_argument_parser_credits(self):
+        sys.argv = ["run_client.py", "--credits", "5000"]
