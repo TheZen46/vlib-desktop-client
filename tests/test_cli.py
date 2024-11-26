@@ -49,3 +49,14 @@ class TestVLibCommandLineInterface(unittest.TestCase):
 
     def test_cli_argument_parser_credits(self):
         sys.argv = ["run_client.py", "--credits", "5000"]
+        args = run_client.parse_arguments()
+        self.assertEqual(args.credits, 5000)
+
+    def test_cli_argument_parser_sound(self):
+        sys.argv = ["run_client.py", "--sound", "off"]
+        args = run_client.parse_arguments()
+        self.assertEqual(args.sound, "off")
+
+
+if __name__ == "__main__":
+    unittest.main()
