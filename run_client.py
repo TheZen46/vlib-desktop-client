@@ -34,3 +34,40 @@ def parse_arguments():
         "-v", "--version",
         action="version",
         version=f"VLib Client v{CLIENT_VERSION} (Las Purgas)"
+    )
+    parser.add_argument(
+        "-t", "--test",
+        action="store_true",
+        help="Run the complete automated unit test suite and exit."
+    )
+    parser.add_argument(
+        "--diag",
+        action="store_true",
+        help="Run complete client subsystem diagnostics and health check."
+    )
+    parser.add_argument(
+        "--offline",
+        action="store_true",
+        help="Force Offline Demo Mode, bypassing remote database connections."
+    )
+    parser.add_argument(
+        "--user",
+        type=str,
+        default=None,
+        help="Pre-authenticate as a specific user in offline demo mode (e.g. thezen46, Poldo, scandaloah)."
+    )
+    parser.add_argument(
+        "--page",
+        type=str,
+        default=None,
+        help="Direct deep-link to launch a specific page (e.g. main_channel, game_session, modding, options, getVIP)."
+    )
+    parser.add_argument(
+        "--credits",
+        type=int,
+        default=None,
+        help="Developer override: set wallet credits balance upon launch."
+    )
+    parser.add_argument(
+        "--sound",
+        choices=["on", "off"],
