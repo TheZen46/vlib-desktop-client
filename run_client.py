@@ -71,3 +71,39 @@ def parse_arguments():
     parser.add_argument(
         "--sound",
         choices=["on", "off"],
+        default=None,
+        help="Enable or mute client synthesized audio effects."
+    )
+    return parser.parse_args()
+
+
+def run_tests():
+    import unittest
+    print("=" * 60)
+    print("  Running VLib Client Automated Test Suite...")
+    print("=" * 60)
+    loader = unittest.TestLoader()
+    suite = loader.discover(str(PROJECT_ROOT / "tests"), pattern="test_*.py")
+    runner = unittest.TextTestRunner(verbosity=2)
+    result = runner.run(suite)
+    sys.exit(0 if result.wasSuccessful() else 1)
+
+
+def run_diagnostics():
+    print("=" * 65)
+    print(f"  VLib (Las Purgas) Desktop Client v{CLIENT_VERSION} - System Diagnostics")
+    print("=" * 65)
+    print(f"• Platform:         {platform.system()} {platform.release()} ({platform.machine()})")
+    print(f"• Python Version:   {sys.version.split()[0]} ({sys.executable})")
+
+    # Tkinter check
+    try:
+        import tkinter as tk
+        r = tk.Tk()
+        tk_ver = r.tk.call("info", "patchlevel")
+        r.destroy()
+        print(f"• GUI Engine:       Tkinter {tk_ver} [OK]")
+    except Exception as e:
+        print(f"• GUI Engine:       Tkinter Failed: {e} [ERROR]")
+
+    # Pillow check
