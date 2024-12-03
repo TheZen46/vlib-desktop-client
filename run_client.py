@@ -107,3 +107,40 @@ def run_diagnostics():
         print(f"• GUI Engine:       Tkinter Failed: {e} [ERROR]")
 
     # Pillow check
+    try:
+        import PIL
+        from PIL import Image
+        print(f"• Imaging Engine:   Pillow {PIL.__version__} [OK]")
+    except Exception as e:
+        print(f"• Imaging Engine:   Pillow Failed: {e} [ERROR]")
+
+    # Audio Engine
+    if sys.platform == "win32":
+        try:
+            import winsound
+            print("• Audio Engine:     Windows Wave/Beep Synthesizer [OK]")
+        except Exception as e:
+            print(f"• Audio Engine:     Windows Audio Unavailable: {e}")
+    else:
+        print("• Audio Engine:     Non-Windows Host (Audio Muted)")
+
+    # Asset frames 0 to 21
+    assets_dir = PROJECT_ROOT / "tentativo parte1" / "build" / "assets"
+    missing_frames = []
+    for f in range(22):
+        fd = assets_dir / f"frame{f}"
+        if not fd.exists():
+            missing_frames.append(f"frame{f}")
+    if not missing_frames:
+        print("• Asset Slices:     Frames 0 through 21 (100% Present) [OK]")
+    else:
+        print(f"• Asset Slices:     Missing: {missing_frames} [WARNING]")
+
+    # Local storage caches
+    caches = [
+        ("users.json", PROJECT_ROOT / "tentativo parte1" / "users.json"),
+        ("user_profile.json", PROJECT_ROOT / "tentativo parte1" / "local_temp_files" / "user_profile.json"),
+        ("Onl_verification.json", PROJECT_ROOT / "tentativo parte1" / "Onl_verification.json"),
+        ("support_tickets.json", PROJECT_ROOT / "tentativo parte1" / "local_temp_files" / "support_tickets.json")
+    ]
+    for label, path in caches:
