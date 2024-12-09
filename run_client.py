@@ -144,3 +144,39 @@ def run_diagnostics():
         ("support_tickets.json", PROJECT_ROOT / "tentativo parte1" / "local_temp_files" / "support_tickets.json")
     ]
     for label, path in caches:
+        status = "Present" if path.exists() else "Initialized on First Run"
+        print(f"• Cache File:       {label} -> {status}")
+
+    print("=" * 65)
+    print("  Diagnostic Status: ALL CRITICAL SUBSYSTEMS HEALTHY")
+    print("=" * 65)
+    sys.exit(0)
+
+
+def main():
+    args = parse_arguments()
+
+    if args.test:
+        run_tests()
+
+    if args.diag:
+        run_diagnostics()
+
+    if args.offline:
+        os.environ["VLIB_FORCE_OFFLINE"] = "1"
+        print("[Launcher] Offline Mode forced via CLI argument.")
+
+    print("=" * 60)
+    print(f"  VLib (Las Purgas) Desktop Client v{CLIENT_VERSION} - Initializing...")
+    print("=" * 60)
+    print(f"[Launcher] Project Root: {PROJECT_ROOT}")
+    print(f"[Launcher] Application Engine: {APP_DIR}")
+
+    try:
+        from main import Application, OUTPUT_PATH
+    except ImportError as e:
+        print(f"Error importing VLib application: {e}")
+        sys.exit(1)
+
+    app = Application(OUTPUT_PATH=OUTPUT_PATH)
+
