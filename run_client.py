@@ -180,3 +180,40 @@ def main():
 
     app = Application(OUTPUT_PATH=OUTPUT_PATH)
 
+    if args.sound is not None:
+        sound_enabled = (args.sound == "on")
+        if hasattr(app, "profile"):
+            app.profile.data["sound_fx_enabled"] = sound_enabled
+            app.profile.save_profile()
+            print(f"[Launcher] Sound FX override: {'ENABLED' if sound_enabled else 'MUTED'}")
+
+    if args.credits is not None:
+        if hasattr(app, "profile"):
+            app.profile.data["credits"] = args.credits
+            app.profile.save_profile()
+            print(f"[Launcher] Wallet balance overridden to: {args.credits:,} CR")
+
+    if args.user:
+        print(f"[Launcher] Auto-authenticating offline session for: {args.user}")
+        app.change_username(args.user)
+        target_page = args.page if args.page else "main_channel"
+        app.show_page(target_page)
+    elif args.page:
+        print(f"[Launcher] Deep-linking directly to view: {args.page}")
+        app.show_page(args.page)
+
+    def on_closing():
+        print("[Launcher] Shutting down VLib client. Goodbye!")
+        app.destroy()
+
+    app.protocol("WM_DELETE_WINDOW", on_closing)
+
+    try:
+        app.mainloop()
+    except KeyboardInterrupt:
+        print("\n[Launcher] Execution interrupted by user.")
+        sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()
