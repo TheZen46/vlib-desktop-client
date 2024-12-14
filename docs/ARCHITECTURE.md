@@ -1,4 +1,4 @@
-<!-- [2024-DEV Stage 1/4]: docs(arch): document High-Level Router Pattern & Page Lifecycle in ARCHITECTURE.md -->
+<!-- [2024-DEV Stage 2/4]: docs(arch): document Sinusoidal Wave Loading Engine and Harmonic Equations -->
 # VLib Architectural Specification
 
 This document details the internal design, threading models, state lifecycle, and data flow of the **VLib (Las Purgas)** desktop client.
