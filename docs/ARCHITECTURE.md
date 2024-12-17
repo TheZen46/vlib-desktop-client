@@ -1,4 +1,3 @@
-<!-- [2024-DEV Stage 3/4]: docs(arch): document Security, Offline Fallback, and Cloud Storage Adapters -->
 # VLib Architectural Specification
 
 This document details the internal design, threading models, state lifecycle, and data flow of the **VLib (Las Purgas)** desktop client.
