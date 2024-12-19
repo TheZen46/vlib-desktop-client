@@ -1,4 +1,3 @@
-<!-- [2024-DEV Stage 1/2]: docs(readme): update README.md with comprehensive 2024 features and architecture diagram -->
 # VLib (Las Purgas) Desktop Client
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
