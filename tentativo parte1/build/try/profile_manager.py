@@ -89,7 +89,13 @@ class ProfileManager:
         if not username:
             return
         self.data["username"] = username
-        if username.lower() == "thezen46":
+        if username.lower() in ("developer", "dev"):
+            self.data["rank"] = "SYSTEM OVERSEER [DEV]"
+            self.data["is_vip"] = True
+            if self.data.get("credits", 0) < 50000:
+                self.data["credits"] = 99999
+            self.data["active_mods"] = ["neon_reshade", "night_radio", "holo_dice", "neural_hack"]
+        elif username.lower() == "thezen46":
             self.data["rank"] = "ADMIN #0046"
             self.data["is_vip"] = True
         elif username.lower() == "poldo":

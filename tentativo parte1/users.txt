@@ -1,3 +1,9 @@
+username: developer
+password: DevMaster2026!
+icon_image: C:\Users\Alessandro\Desktop\libriInformatica-master\porgram\programmi+\tentativo parte1\samurai1_png.png
+birthday: 1995-01-01
+description: System Overseer & Core Platform Developer with full root permissions.
+
 username: thezen46
 password: password47sicura
 icon_image: C:\Users\Alessandro\Desktop\libriInformatica-master\porgram\programmi+\tentativo parte1\build\assets\frame4\button_10.png
@@ -9,4 +15,3 @@ password: bob_password
 icon_image: path/to/bob_icon.jpg
 birthday: 1985-05-15
 description: Bob's profile description.
-

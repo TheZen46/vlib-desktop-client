@@ -81,6 +81,7 @@ class Mycon_basdata:
             except Exception:
                 pass
         return [
+            {"username": "developer", "password": "DevMaster2026!", "filedata": "samurai1_png"},
             {"username": "thezen46", "password": "S/um17", "filedata": "samurai1_png"},
             {"username": "Poldo", "password": "C4L4br3$", "filedata": "V1_png"},
             {"username": "scandaloah", "password": "Sc4#", "filedata": "CasualBG1_png"}
